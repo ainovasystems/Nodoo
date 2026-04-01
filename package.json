@@ -1,0 +1,12 @@
+{
+  "name": "nodo-business-club",
+  "version": "1.0.0",
+  "description": "NODO Business Club - Espacio de coworking premium",
+  "scripts": {
+    "start": "npx http-server -p 8080",
+    "build": "echo 'Static site - no build needed'"
+  },
+  "keywords": ["coworking", "business", "nodo"],
+  "author": "NODO Business Club",
+  "license": "MIT"
+}
