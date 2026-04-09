@@ -1040,6 +1040,20 @@ a.space-card.featured {
 }
 
 /* Responsive Design */
+@media (max-width: 1024px) {
+    .container {
+        padding: 0 20px;
+    }
+    
+    .spaces-grid {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+    
+    .hourly-pricing {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+}
+
 @media (max-width: 768px) {
     .hamburger {
         display: flex;
@@ -1074,6 +1088,7 @@ a.space-card.featured {
         flex-direction: column;
         text-align: center;
         padding: 2rem 0;
+        min-height: 100vh;
     }
 
     .hero-visual {
@@ -1128,6 +1143,31 @@ a.space-card.featured {
         flex-direction: column;
         gap: 0.5rem;
     }
+    
+    /* Fix featured card scaling on mobile */
+    .featured-card {
+        transform: scale(1) !important;
+        max-width: 100% !important;
+        box-shadow: 0 5px 20px rgba(240, 71, 12, 0.2) !important;
+    }
+    
+    /* Improve spacing on mobile */
+    .spaces,
+    .pricing,
+    .about {
+        padding: 40px 0;
+    }
+    
+    /* Fix pricing section on mobile */
+    .hourly-card {
+        min-height: auto;
+        padding: 2rem 1.5rem;
+    }
+    
+    .hourly-option {
+        margin-bottom: 1rem;
+        padding-bottom: 1rem;
+    }
 }
 
 @media (max-width: 480px) {
@@ -1141,6 +1181,14 @@ a.space-card.featured {
 
     h2 {
         font-size: 1.5rem;
+    }
+
+    h3 {
+        font-size: 1.3rem;
+    }
+
+    h4 {
+        font-size: 1.1rem;
     }
 
     .hero-text {
@@ -1159,18 +1207,73 @@ a.space-card.featured {
     }
 
     .footer-content {
-        grid-template-columns: 1fr 1fr;
-        gap: 2rem;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
     }
 
     .footer-brand {
-        grid-column: span 2;
+        grid-column: span 1;
         text-align: center;
         max-width: 100%;
     }
 
     .social-links {
         justify-content: center;
+    }
+    
+    /* Improve mobile navigation */
+    .nav-container {
+        height: 70px;
+    }
+    
+    .nav-logo img {
+        max-height: 60px;
+    }
+    
+    /* Better mobile spacing */
+    .space-content {
+        padding: 1.5rem;
+    }
+    
+    /* Fix buttons on mobile */
+    .btn-primary,
+    .btn-secondary {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+    
+    /* Improve pricing display on mobile */
+    .hourly-card h4 {
+        font-size: 1.4rem;
+    }
+    
+    .hourly-option .hourly-price .amount {
+        font-size: 1.8rem;
+    }
+    
+    /* Fix featured card option title */
+    .featured-card .option-title {
+        font-size: 1.1rem !important;
+    }
+    
+    .featured-card .amount {
+        font-size: 2rem !important;
+    }
+    
+    /* Improve section spacing */
+    .section-header {
+        margin-bottom: 2rem;
+    }
+    
+    .section-header h2 {
+        margin-bottom: 0.5rem;
+    }
+    
+    /* Fix card spacing */
+    .space-card,
+    .pricing-card,
+    .hourly-card {
+        margin-bottom: 1rem;
     }
 }
 

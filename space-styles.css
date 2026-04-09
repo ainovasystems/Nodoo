@@ -1316,6 +1316,20 @@
 }
 
 /* Responsive Design */
+@media (max-width: 1024px) {
+    .space-hero h1 {
+        font-size: 2.5rem;
+    }
+    
+    .details-grid {
+        gap: 2rem;
+    }
+    
+    .gallery-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+}
+
 @media (max-width: 968px) {
     .details-grid {
         grid-template-columns: 1fr;
@@ -1343,6 +1357,7 @@
 @media (max-width: 768px) {
     .space-hero {
         min-height: 50vh;
+        padding-top: 100px;
     }
     
     .space-hero h1 {
@@ -1393,11 +1408,39 @@
     .perfect-for-grid {
         grid-template-columns: 1fr;
     }
+    
+    /* Improve spacing on mobile */
+    .space-details,
+    .space-gallery {
+        padding: 40px 0;
+    }
+    
+    .space-areas {
+        gap: 1.5rem;
+    }
+    
+    .area-card {
+        padding: 1.5rem;
+    }
+    
+    /* Better mobile navigation */
+    .breadcrumb {
+        font-size: 0.85rem;
+    }
 }
 
 @media (max-width: 480px) {
+    .space-hero {
+        min-height: 40vh;
+        padding-top: 90px;
+    }
+    
     .space-hero h1 {
         font-size: 1.8rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem;
     }
     
     .hero-features {
@@ -1418,6 +1461,49 @@
     
     .related-grid {
         grid-template-columns: 1fr;
+    }
+    
+    /* Improve mobile typography */
+    .details-content h2 {
+        font-size: 1.5rem;
+    }
+    
+    .area-card h3 {
+        font-size: 1.2rem;
+    }
+    
+    .area-card p {
+        font-size: 0.95rem;
+    }
+    
+    /* Better mobile spacing */
+    .space-areas {
+        gap: 1rem;
+    }
+    
+    .area-card {
+        padding: 1.25rem;
+    }
+    
+    /* Fix gallery on mobile */
+    .gallery-item {
+        aspect-ratio: 4/3;
+    }
+    
+    /* Improve contact info display */
+    .contact-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+    }
+    
+    .contact-icon {
+        margin: 0 auto;
+    }
+    
+    /* Better mobile footer */
+    .footer-content {
+        padding: 40px 0;
     }
 }
 
