@@ -120,7 +120,7 @@
 }
 
 .space-hero.chatroom-hero {
-    background: url('./chatroom-1.jpg') center/cover no-repeat !important;
+    background: url('chatroom.jpg') center/cover no-repeat;
     position: relative;
 }
 
