@@ -17,7 +17,9 @@ export default function BookingDetail({ bookingId, onClose }: { bookingId: strin
 
   useEffect(() => setConfirming(false), [bookingId]);
 
-  const when = b && space ? `${fmtDateLong(b.date)}${space.mode === 'jornada' ? '' : `, ${fmtRange(b.start, b.end)}`}` : '';
+  // En mitad de frase, el día va en minúscula: "jueves, 12 de noviembre".
+  const day = b ? fmtDateLong(b.date) : '';
+  const when = b && space ? `${day.charAt(0).toLowerCase()}${day.slice(1)}${space.mode === 'jornada' ? '' : `, ${fmtRange(b.start, b.end)}`}` : '';
 
   return (
     <Modal
