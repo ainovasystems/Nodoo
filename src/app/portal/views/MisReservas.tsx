@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { fmtDateLong, fmtRange } from '../../dates';
 import { setBookingStatus, spaceById } from '../../store';
-import { BookingBadge, Button, EmptyState, Modal, PageHead, SedeTag, Segmented, useToast } from '../../ui';
+import { BookingBadge, Button, Card, EmptyState, Modal, PageHead, SedeTag, Segmented, useToast } from '../../ui';
 import type { Booking } from '../../types';
 import { byDateAsc, byDateDesc, isUpcoming, priceLabel, type ViewProps } from '../helpers';
 
@@ -49,7 +49,7 @@ export function MisReservas({ state, me }: ViewProps) {
       </div>
 
       {list.length === 0 ? (
-        <div className="card">
+        <Card>
           {tab === 'proximas' && (
             <EmptyState
               title="No tienes reservas próximas"
@@ -64,13 +64,14 @@ export function MisReservas({ state, me }: ViewProps) {
           )}
           {tab === 'pasadas' && <EmptyState title="Todavía no hay reservas pasadas">Aquí verás el historial de los espacios que has usado.</EmptyState>}
           {tab === 'canceladas' && <EmptyState title="No has cancelado ninguna reserva">Las reservas que canceles quedarán registradas aquí.</EmptyState>}
-        </div>
+        </Card>
       ) : (
         <ul className="booking-list">
           {list.map((b) => {
             const space = spaceById(state, b.spaceId);
             return (
-              <li key={b.id} className="card booking-item">
+              <li key={b.id}>
+                <Card className="booking-item">
                 <div className="booking-item__main">
                   <p className="booking-item__space">{space.name}</p>
                   <p className="booking-item__when">
@@ -89,6 +90,7 @@ export function MisReservas({ state, me }: ViewProps) {
                     </Button>
                   )}
                 </div>
+                </Card>
               </li>
             );
           })}

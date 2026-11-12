@@ -4,6 +4,13 @@ import { SITE } from '@/data/site';
 ---
 
 <Base title={`Página no encontrada | ${SITE.name}`} description="La página que buscas no existe o ha cambiado de dirección." noindex>
+  <nav class="breadcrumb container" aria-label="Ruta de navegación">
+    <ol>
+      <li><a href="/">Inicio</a></li>
+      <li aria-current="page">Página no encontrada</li>
+    </ol>
+  </nav>
+
   <section class="section">
     <div class="container"><div class="prose">
       <h1>Esta página no existe</h1>

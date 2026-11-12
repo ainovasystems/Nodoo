@@ -42,7 +42,7 @@ export const SEDES: Sede[] = [
     mapsUrl: 'https://maps.app.goo.gl/HskTP73yazNzW4Ru8',
     hours: { opens: '07:00', closes: '00:00', label: '07:00 – 00:00' },
     intro:
-      'Frente al puerto, en plena Avenida Linares Rivas. Puestos de trabajo, sala de reuniones, oficina ejecutiva y un estudio con vistas al mar.',
+      'Frente al puerto, en plena Avenida Linares Rivas. Puestos de trabajo, sala de reuniones, sala ejecutiva y un estudio con vistas al mar.',
   },
   {
     id: 'lugo',
@@ -346,7 +346,7 @@ export const TARIFAS_SALAS: { space: string; slug: string; groups: { title: stri
 export const FAQS: { q: string; a: string }[] = [
   {
     q: '¿Qué es NODO Business Club?',
-    a: 'NODO Business Club es un espacio de coworking con sedes en A Coruña y Lugo. Ofrece puestos de trabajo mensuales, salas de reuniones por horas, una oficina ejecutiva y un estudio polivalente, pensado para profesionales independientes, teletrabajadores y empresas.',
+    a: 'NODO Business Club es un espacio de coworking con sedes en A Coruña y Lugo. Ofrece puestos de trabajo mensuales, salas de reuniones por horas, una sala ejecutiva y un estudio polivalente, pensado para profesionales independientes, teletrabajadores y empresas.',
   },
   {
     q: '¿Dónde están las sedes de NODO?',

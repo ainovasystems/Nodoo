@@ -6,7 +6,7 @@ import Picture from '@/components/Picture.astro';
 import SpaceCard from '@/components/SpaceCard.astro';
 import Faq from '@/components/Faq.astro';
 import LeadForm from '@/components/LeadForm.astro';
-import { ESPACIOS, FAQS, SEDES, SITE, type Sede } from '@/data/site';
+import { ESPACIOS, FAQS, PLANES, SEDES, SITE, type Sede } from '@/data/site';
 import { breadcrumbSchema, faqSchema, sedeSchema } from '@/data/schema';
 
 export function getStaticPaths() {
@@ -25,14 +25,14 @@ const faqs = isCoruna
   ? [
       {
         q: '¿Dónde está el coworking NODO en A Coruña?',
-        a: `NODO Business Club A Coruña está en ${sede.street}, frente al puerto. La sede abre de ${sede.hours!.label}.`,
+        a: `${sede.name} está en ${sede.street}, frente al puerto. La sede abre de ${sede.hours!.label}.`,
       },
       ...FAQS.filter((f) => /cuesta|permanencia|sala de reuniones|fotos|zonas comunes/i.test(f.q)),
     ]
   : [
       {
         q: '¿Dónde está el coworking NODO en Lugo?',
-        a: `NODO Business Club Lugo está en ${sede.street}, Lugo.`,
+        a: `${sede.name} está en ${sede.street}, ${sede.locality}.`,
       },
       {
         q: '¿Cómo puedo conocer la sede de Lugo?',
@@ -40,7 +40,7 @@ const faqs = isCoruna
       },
       {
         q: '¿NODO tiene más sedes en Galicia?',
-        a: `Sí. Además de Lugo, NODO Business Club tiene sede en A Coruña, en ${other.street}.`,
+        a: `Sí. Además de ${sede.city}, ${SITE.name} tiene sede en ${other.city}, en ${other.street}.`,
       },
     ];
 
@@ -49,8 +49,8 @@ const crumbs = [
   { name: `Coworking en ${sede.city}`, path: `/${sede.slug}/` },
 ];
 const description = isCoruna
-  ? `Coworking en A Coruña frente al puerto: puestos desde 149 € + IVA/mes, sala de reuniones, oficina ejecutiva y estudio con vistas al mar. ${sede.street}.`
-  : `Coworking en Lugo: la segunda sede de NODO Business Club, en ${sede.street}. Puestos de trabajo y salas de reuniones. Reserva una visita.`;
+  ? `Coworking en ${sede.city} frente al puerto: puestos desde ${PLANES[0].price} € ${PLANES[0].unit}, sala de reuniones, sala ejecutiva y estudio con vistas al mar. ${sede.street}.`
+  : `Coworking en ${sede.city}: la segunda sede de ${SITE.name}, en ${sede.street}. Puestos de trabajo y salas de reuniones. Reserva una visita.`;
 ---
 
 <Base title={`Coworking en ${sede.city} | NODO Business Club`} description={description} schema={[sedeSchema(site, sede), breadcrumbSchema(site, crumbs), faqSchema(faqs)]}>
@@ -84,7 +84,7 @@ const description = isCoruna
       <section class="section section--white">
         <div class="container">
           <div class="section__head">
-            <h2>Espacios de la sede de A Coruña</h2>
+            <h2>Espacios de la sede de {sede.city}</h2>
             <p class="lead">
               Coworking, sala de reuniones, sala ejecutiva y estudio, todos en la misma planta y con zonas comunes incluidas.{' '}
               <a class="text-link" href="/#tarifas">Ver tarifas</a>.
@@ -98,19 +98,24 @@ const description = isCoruna
     ) : (
       <section class="section section--white">
         <div class="container split">
-          <div class="section__head section__head--flush">
-            <h2>NODO, ahora también en Lugo</h2>
-            <p class="lead">
-              Puestos de trabajo y salas para reunirte, con la misma forma de trabajar y la misma comunidad que en A Coruña.
-            </p>
-            <p>
-              Escríbenos y te contamos qué espacios hay disponibles en la sede de Lugo, sus tarifas y cuándo puedes venir a conocerla.
-            </p>
-            <p><a class="text-link" href={`/${other.slug}/`}>Conoce también la sede de {other.city}</a></p>
+          <div>
+            <div class="section__head section__head--tight">
+              <h2>NODO, ahora también en {sede.city}</h2>
+              <p class="lead">
+                Puestos de trabajo y salas para reunirte, con la misma forma de trabajar y la misma comunidad que en {other.city}.
+              </p>
+            </div>
+            <div class="prose">
+              <p>
+                Escríbenos y te contamos qué espacios hay disponibles en la sede de {sede.city}, sus tarifas y cuándo puedes venir a
+                conocerla.
+              </p>
+              <p><a class="text-link" href={`/${other.slug}/`}>Conoce también la sede de {other.city}</a></p>
+            </div>
           </div>
           <figure class="sede-photo">
             <Picture photo={ESPACIOS[0].photos[0]} sizes="(min-width: 900px) 560px, 100vw" />
-            <figcaption>The Hive, en la sede de A Coruña.</figcaption>
+            <figcaption>{ESPACIOS[0].name}, en la sede de {other.city}.</figcaption>
           </figure>
         </div>
       </section>

@@ -16,7 +16,7 @@ const schema = [organizationSchema(site), websiteSchema(site), ...SEDES.map((s) 
 
 <Base
   title="Coworking en A Coruña y Lugo | NODO Business Club"
-  description="Coworking, salas de reuniones y estudio profesional en A Coruña y Lugo. Puestos desde 149 € + IVA al mes, sin permanencia y sin matrícula. Reserva una visita."
+  description={SITE.description}
   schema={schema}
 >
   <link slot="head" rel="preload" as="image" href={`/img/${heroPhoto.src}-1280.webp`} imagesrcset={`/img/${heroPhoto.src}-640.webp 640w, /img/${heroPhoto.src}-1280.webp 1280w`} imagesizes="(min-width: 960px) 640px, 100vw" />
@@ -36,10 +36,10 @@ const schema = [organizationSchema(site), websiteSchema(site), ...SEDES.map((s) 
           <a class="btn btn--ghost btn--lg" href="#tarifas">Ver tarifas</a>
         </div>
         <dl class="hero__facts" data-enter style="--i:5">
-          <div class="fact"><dt>Puesto desde</dt><dd>149 € + IVA/mes</dd></div>
+          <div class="fact"><dt>Puesto desde</dt><dd>{PLANES[0].price} € {PLANES[0].unit}</dd></div>
           <div class="fact"><dt>Compromiso</dt><dd>Sin permanencia</dd></div>
           <div class="fact"><dt>Alta</dt><dd>Sin matrícula</dd></div>
-          <div class="fact"><dt>Sedes</dt><dd>2 en Galicia</dd></div>
+          <div class="fact"><dt>Sedes</dt><dd>{SEDES.length} en Galicia</dd></div>
         </dl>
       </div>
       <div class="hero__visual">
@@ -85,7 +85,7 @@ const schema = [organizationSchema(site), websiteSchema(site), ...SEDES.map((s) 
 
   <section class="section" id="sobre-nodo">
     <div class="container about">
-      <div class="about__intro">
+      <div class="section__head section__head--flush about__intro">
         <h2>Un sitio para trabajar, conectar y crecer</h2>
         <p class="lead">
           NODO nace de la necesidad de un espacio para el trabajo individual, para conectar y para crear sinergias de crecimiento. Un entorno

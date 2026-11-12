@@ -1,7 +1,7 @@
 import { useEffect, useState, type FormEvent } from 'react';
-import { fmtDateLong } from '../../dates';
+import { fmtDateNum } from '../../dates';
 import { planById, updateMember } from '../../store';
-import { Avatar, Button, Card, Field, MemberBadge, PageHead, SEDE_LABEL, useToast } from '../../ui';
+import { Avatar, Button, Card, Field, MemberBadge, PageHead, SedeTag, useToast } from '../../ui';
 import type { ViewProps } from '../helpers';
 
 export function Perfil({ state, me }: ViewProps) {
@@ -67,9 +67,11 @@ export function Perfil({ state, me }: ViewProps) {
             </div>
             <dl className="detail">
               <dt>Sede de referencia</dt>
-              <dd>{SEDE_LABEL[me.sedeId]}</dd>
+              <dd>
+                <SedeTag sede={me.sedeId} />
+              </dd>
               <dt>Miembro desde</dt>
-              <dd>{fmtDateLong(me.since).replace(/^[^,]+, /, '')} de {me.since.slice(0, 4)}</dd>
+              <dd>{fmtDateNum(me.since)}</dd>
               <dt>Plan</dt>
               <dd>{plan ? plan.name : 'Sin plan mensual'}</dd>
               <dt>Estado</dt>

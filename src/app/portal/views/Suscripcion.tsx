@@ -128,7 +128,9 @@ export function Suscripcion({ state, me }: ViewProps) {
                     <th>Concepto</th>
                     <th className="num">Importe sin IVA</th>
                     <th>Estado</th>
-                    <th aria-label="Descarga" />
+                    <th>
+                      <span className="visually-hidden">Descarga</span>
+                    </th>
                   </tr>
                 </thead>
                 <tbody>

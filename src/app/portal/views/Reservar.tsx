@@ -1,10 +1,10 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, type ReactNode } from 'react';
 import { Clock, Users } from 'lucide-react';
-import { fmtDateLong, fmtMoney, fmtRange, fmtTime, fromISODate, shiftISO, todayISO } from '../../dates';
+import { fmtDateLong, fmtMoney, fmtRange, fmtTime, fmtWeekdayShort, fromISODate, nowMinutes, shiftISO, todayISO } from '../../dates';
 import { createBooking, freeUnits, priceFor } from '../../store';
-import { Button, PageHead, SEDE_LABEL, Segmented, useToast } from '../../ui';
+import { Button, Card, Field, PageHead, SEDE_LABEL, SedeTag, Segmented, useToast } from '../../ui';
 import type { SedeId, Space } from '../../types';
-import { nowMinutes, priceLabel, type ViewProps } from '../helpers';
+import { priceLabel, type ViewProps } from '../helpers';
 
 const MAX_HOURS = 4;
 
@@ -19,8 +19,18 @@ function nextDays(): string[] {
   return out;
 }
 
+/** Título de un paso del flujo: su número y su nombre. */
+function StepTitle({ n, children }: { n: number; children: ReactNode }) {
+  return (
+    <span className="step-title">
+      <span className="step-title__n">{n}</span>
+      {children}
+    </span>
+  );
+}
+
 function rateText(space: Space): string {
-  if (space.mode === 'jornada') return 'Incluido en tu plan · jornada completa';
+  if (space.mode === 'jornada') return 'Incluido en tu plan';
   return `${fmtMoney(space.rateMember)}/h + IVA, tarifa de miembro`;
 }
 
@@ -99,11 +109,8 @@ export function Reservar({ state, me, go }: ViewProps) {
       <PageHead title="Reservar" subtitle="Elige sede, espacio, día y hora. La reserva queda confirmada al momento." />
 
       <div className="book">
-        <div className="stack book__steps">
-          <section className="card" aria-labelledby="step-sede">
-            <h2 className="step-title" id="step-sede">
-              <span className="step-title__n">1</span> Sede
-            </h2>
+        <div className="stack">
+          <Card title={<StepTitle n={1}>Sede</StepTitle>}>
             <Segmented
               label="Sede"
               value={sede}
@@ -118,12 +125,9 @@ export function Reservar({ state, me, go }: ViewProps) {
               ]}
             />
             {sede !== me.sedeId && <p className="muted step-note">Tu sede de referencia es {SEDE_LABEL[me.sedeId]}, pero puedes reservar en las dos.</p>}
-          </section>
+          </Card>
 
-          <section className="card" aria-labelledby="step-espacio">
-            <h2 className="step-title" id="step-espacio">
-              <span className="step-title__n">2</span> Espacio
-            </h2>
+          <Card title={<StepTitle n={2}>Espacio</StepTitle>}>
             <div className="space-options">
               {spaces.map((s) => (
                 <button
@@ -146,16 +150,13 @@ export function Reservar({ state, me, go }: ViewProps) {
                     {fmtRange(s.open, s.close)}
                   </span>
                   <span className="space-option__rate">{rateText(s)}</span>
-                  {s.sedeId === 'lugo' && <span className="space-option__note">Nombre y tarifa provisionales</span>}
+                  {s.sedeId === 'lugo' && <span className="space-option__note">Nombre y tarifas provisionales</span>}
                 </button>
               ))}
             </div>
-          </section>
+          </Card>
 
-          <section className="card" aria-labelledby="step-fecha">
-            <h2 className="step-title" id="step-fecha">
-              <span className="step-title__n">3</span> Fecha
-            </h2>
+          <Card title={<StepTitle n={3}>Fecha</StepTitle>}>
             <div className="day-strip">
               {days.map((d) => {
                 const dt = fromISODate(d);
@@ -171,33 +172,34 @@ export function Reservar({ state, me, go }: ViewProps) {
                       resetSlot();
                     }}
                   >
-                    <span className="day-chip__dow">{d === today ? 'Hoy' : dt.toLocaleDateString('es-ES', { weekday: 'short' }).replace('.', '')}</span>
+                    <span className="day-chip__dow">{d === today ? 'Hoy' : fmtWeekdayShort(d)}</span>
                     <span className="day-chip__num">{dt.getDate()}</span>
                   </button>
                 );
               })}
             </div>
-            <label className="date-other">
-              <span className="field__label">Otra fecha</span>
-              <input
-                type="date"
-                className="input"
-                min={today}
-                value={date}
-                onChange={(e) => {
-                  if (e.target.value && e.target.value >= today) {
-                    setDate(e.target.value);
-                    resetSlot();
-                  }
-                }}
-              />
-            </label>
-          </section>
+            <div className="date-other">
+              <Field label="Otra fecha">
+                {(id) => (
+                  <input
+                    id={id}
+                    type="date"
+                    className="input"
+                    min={today}
+                    value={date}
+                    onChange={(e) => {
+                      if (e.target.value && e.target.value >= today) {
+                        setDate(e.target.value);
+                        resetSlot();
+                      }
+                    }}
+                  />
+                )}
+              </Field>
+            </div>
+          </Card>
 
-          <section className="card" aria-labelledby="step-hora">
-            <h2 className="step-title" id="step-hora">
-              <span className="step-title__n">4</span> {space?.mode === 'jornada' ? 'Jornada' : 'Hora'}
-            </h2>
+          <Card title={<StepTitle n={4}>{space?.mode === 'jornada' ? 'Jornada' : 'Hora'}</StepTitle>}>
 
             {!space && <p className="muted">Elige primero un espacio para ver su disponibilidad.</p>}
 
@@ -232,7 +234,7 @@ export function Reservar({ state, me, go }: ViewProps) {
                 </div>
                 {start !== null && durations.length > 0 && (
                   <div className="duration">
-                    <span className="field__label" id="duration-label">
+                    <span className="duration__label" aria-hidden="true">
                       Duración
                     </span>
                     <Segmented
@@ -272,18 +274,17 @@ export function Reservar({ state, me, go }: ViewProps) {
                 )}
               </div>
             )}
-          </section>
+          </Card>
         </div>
 
-        <aside className="card book-summary" aria-labelledby="summary-title">
-          <h2 className="card__title" id="summary-title">
-            Tu reserva
-          </h2>
+        <Card title="Tu reserva" className="book-summary">
           <dl className="detail">
             <dt>Espacio</dt>
             <dd>{space ? space.name : <span className="muted">Sin elegir</span>}</dd>
             <dt>Sede</dt>
-            <dd>{SEDE_LABEL[sede]}</dd>
+            <dd>
+              <SedeTag sede={sede} />
+            </dd>
             <dt>Fecha</dt>
             <dd>{fmtDateLong(date)}</dd>
             <dt>Horario</dt>
@@ -300,7 +301,7 @@ export function Reservar({ state, me, go }: ViewProps) {
             Confirmar reserva
           </Button>
           {(!space || !range) && <p className="muted book-summary__hint">Elige espacio, fecha y hora para confirmar.</p>}
-        </aside>
+        </Card>
       </div>
     </>
   );

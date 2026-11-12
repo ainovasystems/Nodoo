@@ -18,6 +18,7 @@
   --olive-300: #b9b9a3;
   --cream-200: #f7eadb; /* superficie crema un punto más profunda */
   --cream-300: #eddcc8;
+  --orange-500: #ff5a1f; /* naranja al pasar el cursor */
   --orange-700: #c93a05; /* naranja para texto pequeño sobre claro */
   --orange-100: #fde3d6;
   --line: rgba(57, 59, 24, 0.14);
@@ -25,6 +26,8 @@
   --on-dark: #fff6ee;
   --on-dark-muted: rgba(255, 246, 238, 0.72);
   --line-on-dark: rgba(255, 246, 238, 0.18);
+  --fill-on-dark: rgba(255, 246, 238, 0.12); /* relleno tenue sobre oliva */
+  --cream-glass: rgba(255, 246, 238, 0.92); /* cabecera translúcida */
 
   /* Estados */
   --ok: #2c6a3b;
@@ -65,11 +68,13 @@
   --s-32: 128px;
 
   /* Forma */
+  --r-xs: 4px;
   --r-sm: 8px;
   --r-md: 12px;
   --r-lg: 20px;
   --r-xl: 32px;
   --r-pill: 999px;
+  --r-arch: 200px; /* arco de la foto de portada */
 
   /* Sombras, teñidas con el marrón de marca */
   --shadow-sm: 0 1px 2px rgba(113, 69, 44, 0.08);

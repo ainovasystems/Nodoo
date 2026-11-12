@@ -151,12 +151,6 @@
   }
 }
 
-/* .stack (app.css) no fija la columna a minmax(0, 1fr): sin esto, una tabla o
-   una tira con scroll horizontal ensancha la página en móvil. */
-.portal-main .stack {
-  grid-template-columns: minmax(0, 1fr);
-}
-
 .home-grid > *,
 .book > *,
 .profile-grid > * {
@@ -166,7 +160,7 @@
 /* ---------- Inicio ---------- */
 
 .portal-greeting {
-  margin-top: var(--s-2);
+  margin-top: var(--s-1);
   gap: var(--s-3);
 }
 
@@ -216,6 +210,11 @@
 .next-booking__meta {
   gap: var(--s-2) var(--s-4);
   margin-bottom: var(--s-3);
+  color: var(--on-dark-muted);
+}
+
+.next-booking .sede-tag {
+  font-size: inherit;
   color: var(--on-dark-muted);
 }
 
@@ -310,12 +309,9 @@
 }
 
 .step-title {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: var(--s-2);
-  margin-bottom: var(--s-4);
-  font-size: var(--text-base);
-  font-weight: 600;
 }
 
 .step-title__n {
@@ -434,8 +430,6 @@
 }
 
 .date-other {
-  display: grid;
-  gap: var(--s-1);
   max-width: 220px;
   margin-top: var(--s-3);
 }
@@ -501,6 +495,11 @@
   color: var(--ink);
 }
 
+.duration__label {
+  font-size: var(--text-xs);
+  font-weight: 600;
+}
+
 .duration {
   display: flex;
   flex-wrap: wrap;
@@ -521,6 +520,10 @@
 .book-summary {
   display: grid;
   gap: var(--s-4);
+}
+
+.book-summary .card__head {
+  margin-bottom: 0;
 }
 
 .book-summary .btn {

@@ -3,7 +3,7 @@
 // ya redactado para info@nodobc.com (así ninguna solicitud se pierde) y,
 // además, el contacto se deja en la bandeja de la demo para que aparezca
 // como lead nuevo en el panel interno.
-import { SEDES, SITE } from '@/data/site';
+import { ESPACIOS, PLANES, SEDES, SITE } from '@/data/site';
 
 interface Props {
   /** Sede preseleccionada en las páginas de sede. */
@@ -11,10 +11,12 @@ interface Props {
   id?: string;
 }
 const { sede, id = 'form-contacto' } = Astro.props;
-const interests = ['Puesto de coworking', 'Sala de reuniones', 'Oficina The Office', 'Atlantic Studio', 'Otra consulta'];
+const nameOf = (slug: string) => ESPACIOS.find((e) => e.slug === slug)!.name;
+const COWORKING = 'Puesto de coworking';
+const interests = [COWORKING, 'Sala de reuniones', nameOf('the-office'), nameOf('atlantic-studio'), 'Otra consulta'];
 ---
 
-<form class="form" id={id} novalidate data-lead-form data-email={SITE.email}>
+<form class="form" id={id} novalidate data-lead-form data-email={SITE.email} data-coworking={COWORKING} data-plan-price={PLANES[0].price}>
   <div class="form__row">
     <div class="form-field">
       <label for={`${id}-nombre`}>Nombre y apellidos</label>
@@ -76,12 +78,6 @@ const interests = ['Puesto de coworking', 'Sala de reuniones', 'Oficina The Offi
 
 <script>
   const INBOX = 'nodo-demo-lead-inbox';
-  const VALUES: Record<string, number> = {
-    'Puesto de coworking': 149,
-    'Sala de reuniones': 80,
-    'Oficina The Office': 2475,
-    'Atlantic Studio': 190,
-  };
   const MESSAGES: Record<string, string> = {
     name: 'Escribe tu nombre.',
     email: 'Escribe un email válido, por ejemplo nombre@empresa.com.',
@@ -131,7 +127,8 @@ const interests = ['Puesto de coworking', 'Sala de reuniones', 'Oficina The Offi
         interest,
         source: 'Web',
         stage: 'nuevo',
-        value: VALUES[interest] ?? 0,
+        // Valor mensual estimado: solo se conoce para un puesto; el resto lo fija el equipo.
+        value: interest === form.dataset.coworking ? Number(form.dataset.planPrice) : 0,
         owner: 'Sin asignar',
         createdAt: new Date().toISOString(),
         nextAction: null,

@@ -41,7 +41,7 @@
 }
 
 .btn--primary:hover:not(:disabled) {
-  background: #ff5a1f;
+  background: var(--orange-500);
 }
 
 .btn--dark {

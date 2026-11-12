@@ -1,7 +1,7 @@
 import { CalendarPlus, ChevronRight, MessageSquare } from 'lucide-react';
 import { fmtDateLong, fmtMoney, fmtRange, fmtRelativeDay, fmtStamp, toISODate } from '../../dates';
 import { planById, spaceById } from '../../store';
-import { Badge, BookingBadge, Card, EmptyState, MemberBadge, SEDE_LABEL, SedeTag, TicketBadge } from '../../ui';
+import { Badge, BookingBadge, Button, Card, EmptyState, MemberBadge, PageHead, SedeTag, TicketBadge } from '../../ui';
 import { byDateAsc, firstName, isUpcoming, type ViewProps } from '../helpers';
 
 export function Inicio({ state, me, go }: ViewProps) {
@@ -16,16 +16,16 @@ export function Inicio({ state, me, go }: ViewProps) {
 
   return (
     <>
-      <header className="page-head">
-        <div>
-          <h1 className="page-head__title">Hola, {firstName(me.name)}</h1>
-          <div className="cluster portal-greeting">
+      <PageHead
+        title={`Hola, ${firstName(me.name)}`}
+        subtitle={
+          <span className="cluster portal-greeting">
             <SedeTag sede={me.sedeId} />
             {plan && <Badge tone="info">{plan.name}</Badge>}
             {me.status !== 'activo' && <MemberBadge status={me.status} />}
-          </div>
-        </div>
-      </header>
+          </span>
+        }
+      />
 
       <div className="home-grid">
         <div className="stack">
@@ -40,7 +40,7 @@ export function Inicio({ state, me, go }: ViewProps) {
               </p>
               <div className="cluster next-booking__meta">
                 <span>{fmtDateLong(next.date)}</span>
-                <span>Sede de {SEDE_LABEL[next.sedeId]}</span>
+                <SedeTag sede={next.sedeId} />
                 <BookingBadge status={next.status} />
               </div>
               <div className="cluster">
@@ -97,7 +97,16 @@ export function Inicio({ state, me, go }: ViewProps) {
             }
           >
             {tickets.length === 0 ? (
-              <p className="muted">Aún no has abierto ninguna consulta.</p>
+              <EmptyState
+                title="Aún no has abierto ninguna consulta"
+                action={
+                  <Button variant="primary" onClick={() => go('consultas/nueva')}>
+                    Abrir consulta
+                  </Button>
+                }
+              >
+                Dudas sobre reservas, facturas o las instalaciones: el equipo te responde aquí.
+              </EmptyState>
             ) : (
               <ul className="rows">
                 {tickets.map((t) => (
@@ -140,7 +149,9 @@ export function Inicio({ state, me, go }: ViewProps) {
                 <dt>Próxima factura</dt>
                 <dd>{me.status === 'activo' ? fmtDateLong(nextInvoice) : 'Sin facturas mientras esté en pausa'}</dd>
                 <dt>Sede</dt>
-                <dd>{SEDE_LABEL[me.sedeId]}</dd>
+                <dd>
+                  <SedeTag sede={me.sedeId} />
+                </dd>
               </dl>
               <p className="muted">Sin permanencia y sin matrícula.</p>
             </div>

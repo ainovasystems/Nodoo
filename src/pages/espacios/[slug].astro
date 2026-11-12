@@ -23,10 +23,11 @@ const crumbs = [
   { name: 'Espacios', path: '/#espacios' },
   { name: espacio.name, path: `/espacios/${espacio.slug}/` },
 ];
-const title = `${espacio.name}: ${espacio.kind.toLowerCase()} en A Coruña | NODO Business Club`;
+const cta = isHive ? 'Reservar una visita' : 'Consultar disponibilidad';
+const title = `${espacio.name}: ${espacio.kind.toLowerCase()} en ${coruna.city} | ${SITE.name}`;
 ---
 
-<Base title={title} description={`${espacio.summary} En NODO Business Club, ${coruna.street}, A Coruña.`} image={`/img/${espacio.photos[0].src}-1280.webp`} schema={[espacioSchema(site, espacio), breadcrumbSchema(site, crumbs)]}>
+<Base title={title} description={`${espacio.summary} En ${SITE.name}, ${coruna.street}, ${coruna.locality}.`} image={`/img/${espacio.photos[0].src}-1280.webp`} schema={[espacioSchema(site, espacio), breadcrumbSchema(site, crumbs)]}>
   <nav class="breadcrumb container" aria-label="Ruta de navegación">
     <ol>
       <li><a href="/">Inicio</a></li>
@@ -38,10 +39,10 @@ const title = `${espacio.name}: ${espacio.kind.toLowerCase()} en A Coruña | NOD
   <section class="page-hero">
     <div class="container page-hero__grid">
       <div class="page-hero__copy">
-        <p class="page-hero__kind">{espacio.kind} · Sede de A Coruña</p>
+        <p class="page-hero__kind">{espacio.kind} · Sede de {coruna.city}</p>
         <h1>{espacio.name}</h1>
         <p class="lead">{espacio.lead}</p>
-        <a class="btn btn--primary btn--lg" href="#reservar">{isHive ? 'Reservar una visita' : 'Consultar disponibilidad'}</a>
+        <a class="btn btn--primary btn--lg" href="#reservar">{cta}</a>
       </div>
       <dl class="facts">
         {espacio.capacity && <div><dt>Capacidad</dt><dd>Hasta {espacio.capacity} personas</dd></div>}
@@ -69,8 +70,10 @@ const title = `${espacio.name}: ${espacio.kind.toLowerCase()} en A Coruña | NOD
 
   <section class="section">
     <div class="container split">
-      <div class="section__head">
-        <h2>Qué incluye {espacio.name}</h2>
+      <div>
+        <div class="section__head section__head--tight">
+          <h2>Qué incluye {espacio.name}</h2>
+        </div>
         <ul class="checklist">
           {espacio.highlights.map((h) => <li>{h}</li>)}
         </ul>
@@ -129,11 +132,11 @@ const title = `${espacio.name}: ${espacio.kind.toLowerCase()} en A Coruña | NOD
   <section class="section section--dark on-dark" id="reservar">
     <div class="container cta-band">
       <div class="section__head section__head--flush">
-        <h2>{isHive ? 'Ven a conocer The Hive' : `Reserva ${espacio.name}`}</h2>
+        <h2>{isHive ? `Ven a conocer ${espacio.name}` : `Reserva ${espacio.name}`}</h2>
         <p class="lead">Escríbenos o llámanos y te confirmamos disponibilidad para el día que necesitas.</p>
       </div>
       <div class="cta-band__actions">
-        <a class="btn btn--primary btn--lg" href="/#contacto">Enviar solicitud</a>
+        <a class="btn btn--primary btn--lg" href="/#contacto">{cta}</a>
         <a class="btn btn--on-dark btn--lg" href={`tel:${SITE.phoneHref}`}>Llamar al {SITE.phone}</a>
       </div>
     </div>

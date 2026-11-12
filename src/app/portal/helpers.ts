@@ -1,7 +1,6 @@
 // Utilidades propias del portal de miembros.
 
-import { todayISO } from '../dates';
-import { fmtMoney } from '../dates';
+import { fmtMoney, nowMinutes, todayISO } from '../dates';
 import type { Booking, DemoState, Member } from '../types';
 
 export interface ViewProps {
@@ -10,11 +9,6 @@ export interface ViewProps {
   go: (route: string) => void;
   /** Segundo tramo de la ruta, p. ej. "nueva" en #/consultas/nueva. */
   param?: string;
-}
-
-export function nowMinutes(): number {
-  const d = new Date();
-  return d.getHours() * 60 + d.getMinutes();
 }
 
 /** Una reserva sigue siendo "próxima" hasta que termina. */

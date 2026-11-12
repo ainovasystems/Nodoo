@@ -3,6 +3,7 @@
 // revisados por un profesional antes de publicarse. No se indexan.
 import Base from '@/layouts/Base.astro';
 import { SEDES, SITE } from '@/data/site';
+import { breadcrumbSchema } from '@/data/schema';
 
 const DOCS = {
   'aviso-legal': 'Aviso legal',
@@ -17,9 +18,13 @@ export function getStaticPaths() {
 
 const doc = Astro.params.doc as keyof typeof DOCS;
 const title = DOCS[doc];
+const crumbs = [
+  { name: 'Inicio', path: '/' },
+  { name: title, path: `/legal/${doc}/` },
+];
 ---
 
-<Base title={`${title} | ${SITE.name}`} description={`${title} de ${SITE.name}.`} noindex>
+<Base title={`${title} | ${SITE.name}`} description={`${title} de ${SITE.name}.`} schema={[breadcrumbSchema(Astro.site!, crumbs)]} noindex>
   <nav class="breadcrumb container" aria-label="Ruta de navegación">
     <ol>
       <li><a href="/">Inicio</a></li>

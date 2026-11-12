@@ -89,3 +89,14 @@ export function hoursBetween(start: number, end: number): number {
 export function fmtHours(h: number): string {
   return `${String(h).replace('.', ',')} h`;
 }
+
+/** Día de la semana abreviado: "lun", "mar"… */
+export function fmtWeekdayShort(date: string): string {
+  return fromISODate(date).toLocaleDateString('es-ES', { weekday: 'short' }).replace('.', '');
+}
+
+/** Minutos transcurridos desde medianoche, ahora. */
+export function nowMinutes(): number {
+  const d = new Date();
+  return d.getHours() * 60 + d.getMinutes();
+}
