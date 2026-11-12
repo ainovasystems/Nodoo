@@ -1,7 +1,7 @@
 // Utilidades propias del panel interno.
 
 import { createContext, useContext } from 'react';
-import { fromISODate, shiftISO, todayISO, weekStart } from '../dates';
+import { shiftISO, todayISO, weekStart } from '../dates';
 import type { Booking, DemoState, SedeId, Space } from '../types';
 
 export type SedeFilter = SedeId | 'todas';
@@ -53,15 +53,4 @@ export const SOURCE_LABEL: Record<Booking['source'], string> = { portal: 'Portal
 /** Ordena reservas por fecha y hora. */
 export const byWhen = (a: Booking, b: Booking) => a.date.localeCompare(b.date) || a.start - b.start;
 
-/** "jue" para cabeceras de calendario. */
-export function weekdayShort(date: string): string {
-  return fromISODate(date).toLocaleDateString('es-ES', { weekday: 'short' }).replace('.', '');
-}
-
 export const isToday = (date: string) => date === todayISO();
-
-/** Minutos transcurridos hoy desde medianoche. */
-export function nowMinutes(): number {
-  const n = new Date();
-  return n.getHours() * 60 + n.getMinutes();
-}

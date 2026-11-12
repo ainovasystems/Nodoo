@@ -1,7 +1,7 @@
-// Clientes: miembros de las dos sedes, con su ficha completa.
+// Clientes de las dos sedes, con su ficha completa.
 
 import { useMemo, useState } from 'react';
-import { Avatar, BookingBadge, Card, Drawer, EmptyState, Field, InvoiceBadge, MemberBadge, PageHead, SedeTag, TicketBadge, useToast } from '../../ui';
+import { Avatar, BookingBadge, Button, Card, Drawer, EmptyState, Field, InvoiceBadge, MemberBadge, Modal, PageHead, SedeTag, TicketBadge, useToast } from '../../ui';
 import { inSede, planById, spaceById, updateMember, useDemo } from '../../store';
 import { fmtDateNum, fmtMoney, fmtRange, fmtRelativeDay, todayISO } from '../../dates';
 import type { MemberStatus } from '../../types';
@@ -11,6 +11,7 @@ function MemberDrawer({ memberId, onClose }: { memberId: string | null; onClose:
   const s = useDemo();
   const toast = useToast();
   const today = todayISO();
+  const [confirmBaja, setConfirmBaja] = useState(false);
   const m = memberId ? s.members.find((x) => x.id === memberId) : undefined;
   if (!m) return <Drawer open={false} onClose={onClose} title="Cliente">{null}</Drawer>;
 
@@ -19,6 +20,7 @@ function MemberDrawer({ memberId, onClose }: { memberId: string | null; onClose:
   const tickets = s.tickets.filter((t) => t.memberId === m.id);
 
   return (
+    <>
     <Drawer open onClose={onClose} title={m.name}>
       <div className="stack stack--loose">
         <div className="member-head">
@@ -39,7 +41,7 @@ function MemberDrawer({ memberId, onClose }: { memberId: string | null; onClose:
           </dd>
           <dt>Teléfono</dt>
           <dd>{m.phone}</dd>
-          <dt>Miembro desde</dt>
+          <dt>Cliente desde</dt>
           <dd>{fmtDateNum(m.since)}</dd>
         </dl>
 
@@ -71,7 +73,10 @@ function MemberDrawer({ memberId, onClose }: { memberId: string | null; onClose:
                 className="select"
                 value={m.status}
                 onChange={(e) => {
-                  updateMember(m.id, { status: e.target.value as MemberStatus });
+                  const next = e.target.value as MemberStatus;
+                  // La baja se confirma aparte; el resto de cambios se aplican al momento.
+                  if (next === 'baja') return setConfirmBaja(true);
+                  updateMember(m.id, { status: next });
                   toast('Estado actualizado');
                 }}
               >
@@ -86,7 +91,7 @@ function MemberDrawer({ memberId, onClose }: { memberId: string | null; onClose:
         <section className="stack stack--tight">
           <h3 className="sub-title">Próximas reservas</h3>
           {upcoming.length === 0 ? (
-            <p className="muted">No tiene reservas próximas.</p>
+            <EmptyState title="Sin reservas próximas">Puedes crearle una desde el calendario o desde Reservas.</EmptyState>
           ) : (
             <ul className="rows">
               {upcoming.slice(0, 6).map((b) => {
@@ -111,7 +116,7 @@ function MemberDrawer({ memberId, onClose }: { memberId: string | null; onClose:
         <section className="stack stack--tight">
           <h3 className="sub-title">Facturas</h3>
           {invoices.length === 0 ? (
-            <p className="muted">Sin facturas emitidas.</p>
+            <EmptyState title="Sin facturas emitidas">Las cuotas de su plan aparecerán aquí cada mes.</EmptyState>
           ) : (
             <ul className="rows">
               {invoices.map((i) => (
@@ -132,7 +137,7 @@ function MemberDrawer({ memberId, onClose }: { memberId: string | null; onClose:
         <section className="stack stack--tight">
           <h3 className="sub-title">Consultas</h3>
           {tickets.length === 0 ? (
-            <p className="muted">No ha abierto ninguna consulta.</p>
+            <EmptyState title="Sin consultas">Las consultas que abra desde su portal aparecerán aquí.</EmptyState>
           ) : (
             <ul className="rows">
               {tickets.map((t) => (
@@ -149,6 +154,37 @@ function MemberDrawer({ memberId, onClose }: { memberId: string | null; onClose:
         </section>
       </div>
     </Drawer>
+
+    <Modal
+      open={confirmBaja}
+      onClose={() => setConfirmBaja(false)}
+      title={`Dar de baja a ${m.name}`}
+      footer={
+        <>
+          <Button variant="quiet" onClick={() => setConfirmBaja(false)}>
+            Mantener como cliente
+          </Button>
+          <Button
+            variant="danger"
+            onClick={() => {
+              updateMember(m.id, { status: 'baja' });
+              setConfirmBaja(false);
+              toast(`${m.name} pasa a baja`);
+            }}
+          >
+            Sí, dar de baja
+          </Button>
+        </>
+      }
+    >
+      <div className="stack">
+        <p>
+          <strong>{m.name}</strong> dejará de contar como cliente activo y su plan dejará de sumar en los ingresos recurrentes.
+        </p>
+        <p className="muted">Sus reservas próximas no se cancelan solas: revísalas en la ficha. Puedes volver a activarlo cuando quieras.</p>
+      </div>
+    </Modal>
+    </>
   );
 }
 
@@ -177,7 +213,7 @@ export default function Clientes() {
 
   return (
     <>
-      <PageHead title="Clientes" subtitle={`${activeCount} miembros activos`} />
+      <PageHead title="Clientes" subtitle={`${activeCount} clientes activos`} />
 
       <div className="toolbar">
         <div className="toolbar__field toolbar__field--grow">

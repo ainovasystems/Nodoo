@@ -40,16 +40,17 @@
   height: auto;
 }
 
+/* Botón de menú en móvil: un IconButton del kit, adaptado al fondo oscuro. */
 .shell__menu-btn {
   display: none;
-  place-items: center;
   width: 40px;
   height: 40px;
   border: 1px solid var(--line-on-dark);
-  border-radius: var(--r-pill);
-  background: transparent;
   color: var(--on-dark);
-  cursor: pointer;
+}
+
+.shell__menu-btn:hover {
+  background: var(--line-on-dark);
 }
 
 .shell__nav {
@@ -283,12 +284,6 @@
 .row-link:hover {
   text-decoration: underline;
   text-underline-offset: 3px;
-}
-
-/* El texto solo para lectores de pantalla dentro de una tabla con scroll
-   debe quedar contenido en ella; si no, ensancha la página. */
-.table-wrap {
-  position: relative;
 }
 
 .shell .table {
@@ -1018,6 +1013,11 @@
   color: var(--on-dark);
 }
 
+.msg__text {
+  overflow-wrap: anywhere;
+  white-space: pre-line;
+}
+
 .msg__meta {
   margin-bottom: var(--s-1);
   font-size: var(--text-xs);
@@ -1063,4 +1063,11 @@
 /* Dentro de un formulario en rejilla, el selector segmentado no se estira. */
 .dialog .segmented {
   justify-self: start;
+}
+
+/* Estado vacío dentro de una ficha o un diálogo: más compacto que a página completa. */
+.dialog__body .empty {
+  padding: var(--s-5) var(--s-4);
+  border-radius: var(--r-md);
+  background: var(--nodo-cream);
 }

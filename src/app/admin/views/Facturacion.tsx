@@ -26,7 +26,7 @@ export default function Facturacion() {
     <>
       <PageHead title="Facturación" subtitle="Cuotas mensuales de los planes. Importes sin IVA." />
 
-      <div className="stat-grid stat-grid--3">
+      <div className="stat-grid">
         <Stat label="Facturado este mes" value={fmtMoney(sum(thisMonth))} hint={`${thisMonth.length} facturas emitidas`} />
         <Stat label="Pendiente de cobro" value={fmtMoney(sum(pending))} hint={pending.length ? `${pending.length} facturas sin cobrar` : 'Todo cobrado'} />
         <Stat label="Cobrado este mes" value={fmtMoney(sum(thisMonth.filter((i) => i.status === 'pagada')))} hint="Facturas del mes marcadas como pagadas" />
@@ -74,8 +74,7 @@ export default function Facturacion() {
                       <td>
                         <p className="cell-person__name">{m?.name}</p>
                         <p className="cell-person__sub">
-                          {m?.company}
-                          {sede === 'todas' && <> · <SedeTag sede={i.sedeId} /></>}
+                          {m?.company} · <SedeTag sede={i.sedeId} />
                         </p>
                       </td>
                       <td>{i.concept}</td>

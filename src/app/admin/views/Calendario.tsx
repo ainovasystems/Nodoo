@@ -6,11 +6,11 @@ import { useState } from 'react';
 import { ChevronLeft, ChevronRight, Plus } from 'lucide-react';
 import { Button, Field, IconButton, PageHead, SEDE_LABEL, SedeTag, Segmented } from '../../ui';
 import { bookingWho, inSede, useDemo } from '../../store';
-import { fmtDateLong, fmtDateShort, fmtRange, fmtTime, shiftISO, todayISO } from '../../dates';
+import { fmtDateLong, fmtDateShort, fmtRange, fmtTime, fmtWeekdayShort, nowMinutes, shiftISO, todayISO } from '../../dates';
 import type { Booking, DemoState, Space } from '../../types';
 import BookingModal, { type BookingDraft } from '../components/BookingModal';
 import BookingDetail from '../components/BookingDetail';
-import { isActive, isToday, nowMinutes, SEDE_ORDER, useSede, weekDates, weekdayShort } from '../helpers';
+import { isActive, isToday, SEDE_ORDER, useSede, weekDates } from '../helpers';
 
 const DAY_START = 7 * 60;
 const DAY_END = 24 * 60;
@@ -194,12 +194,12 @@ export default function Calendario() {
             mode === 'dia' ? (
               <div key={c.key} className="cal__head">
                 <span className="cal__head-name">{c.space.name}</span>
-                <span className="cal__head-sub">{c.space.mode === 'jornada' ? `${c.space.units} puestos` : `${c.space.capacity} personas`}</span>
+                <span className="cal__head-sub">{c.space.mode === 'jornada' ? `${c.space.units} puestos` : `Hasta ${c.space.capacity} personas`}</span>
               </div>
             ) : (
               <div key={c.key} className={`cal__head ${isToday(c.date) ? 'is-today' : ''}`}>
                 <span className="cal__head-name cal__head-name--day">
-                  {weekdayShort(c.date)} {Number(c.date.slice(8))}
+                  {fmtWeekdayShort(c.date)} {Number(c.date.slice(8))}
                 </span>
                 <span className="cal__head-sub">{isToday(c.date) ? 'Hoy' : ' '}</span>
               </div>

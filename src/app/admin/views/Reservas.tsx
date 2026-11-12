@@ -131,7 +131,7 @@ export default function Reservas() {
                   <th>Sede</th>
                   <th>Cliente</th>
                   <th>Estado</th>
-                  <th className="num">Importe</th>
+                  <th className="num">Importe sin IVA</th>
                   <th>Origen</th>
                 </tr>
               </thead>
@@ -157,7 +157,7 @@ export default function Reservas() {
                       <td>
                         <BookingBadge status={b.status} />
                       </td>
-                      <td className="num">{b.price > 0 ? fmtMoney(b.price) : <span className="muted">En plan</span>}</td>
+                      <td className="num">{b.price > 0 ? fmtMoney(b.price) : <span className="muted">Incluido en el plan</span>}</td>
                       <td className="muted">{SOURCE_LABEL[b.source]}</td>
                     </tr>
                   );

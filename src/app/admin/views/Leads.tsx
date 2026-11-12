@@ -1,32 +1,16 @@
 // Leads: embudo comercial en tablero o lista, con ficha de seguimiento.
 
 import { useEffect, useState, type DragEvent, type FormEvent } from 'react';
-import { CalendarClock, Plus } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { Button, Card, Drawer, EmptyState, Field, Modal, PageHead, SEDE_LABEL, SedeTag, Segmented, StageBadge, useToast } from '../../ui';
 import { addLeadNote, convertLead, createLead, inSede, moveLead, updateLead, useDemo } from '../../store';
 import { fmtDateNum, fmtMoney, fmtRelativeDay, fmtStamp, todayISO } from '../../dates';
 import { LEAD_STAGES, type Lead, type LeadStage, type SedeId } from '../../types';
+import DueTag, { dueState } from '../components/DueTag';
 import { SEDE_ORDER, useSede } from '../helpers';
 
 const OWNERS = ['Sin asignar', 'Sergio', 'Marta'];
 const SOURCES: Lead['source'][] = ['Web', 'Google', 'Instagram', 'LinkedIn', 'Referido', 'Visita'];
-
-function dueState(lead: Lead, today: string): 'late' | 'today' | null {
-  if (!lead.nextAction || lead.stage === 'ganado' || lead.stage === 'perdido') return null;
-  if (lead.nextAction.date < today) return 'late';
-  if (lead.nextAction.date === today) return 'today';
-  return null;
-}
-
-function DueTag({ lead, today }: { lead: Lead; today: string }) {
-  const d = dueState(lead, today);
-  if (!d) return null;
-  return (
-    <span className={`due ${d === 'late' ? 'due--late' : ''}`}>
-      <CalendarClock size={12} aria-hidden="true" /> {d === 'late' ? 'Seguimiento vencido' : 'Seguimiento hoy'}
-    </span>
-  );
-}
 
 // ---------- Ficha del lead ----------
 
@@ -66,6 +50,16 @@ function LeadDrawer({ leadId, onClose }: { leadId: string | null; onClose: () =>
     addLeadNote(lead.id, note.trim());
     setNote('');
     toast('Nota guardada');
+  };
+
+  const changeStage = (stage: LeadStage) => {
+    moveLead(lead.id, stage);
+    toast(`${lead.name} pasa a «${LEAD_STAGES.find((x) => x.id === stage)!.label}»`);
+  };
+
+  const changeOwner = (owner: string) => {
+    updateLead(lead.id, { owner });
+    toast(owner === 'Sin asignar' ? `${lead.name} queda sin responsable` : `${owner} lleva ahora a ${lead.name}`);
   };
 
   const closed = lead.stage === 'ganado' || lead.stage === 'perdido';
@@ -108,7 +102,7 @@ function LeadDrawer({ leadId, onClose }: { leadId: string | null; onClose: () =>
         <div className="form-grid form-grid--2">
           <Field label="Etapa">
             {(id) => (
-              <select id={id} className="select" value={lead.stage} onChange={(e) => moveLead(lead.id, e.target.value as LeadStage)}>
+              <select id={id} className="select" value={lead.stage} onChange={(e) => changeStage(e.target.value as LeadStage)}>
                 {LEAD_STAGES.map((st) => (
                   <option key={st.id} value={st.id}>
                     {st.label}
@@ -119,7 +113,7 @@ function LeadDrawer({ leadId, onClose }: { leadId: string | null; onClose: () =>
           </Field>
           <Field label="Responsable">
             {(id) => (
-              <select id={id} className="select" value={lead.owner} onChange={(e) => updateLead(lead.id, { owner: e.target.value })}>
+              <select id={id} className="select" value={lead.owner} onChange={(e) => changeOwner(e.target.value)}>
                 {OWNERS.map((o) => (
                   <option key={o}>{o}</option>
                 ))}
@@ -144,7 +138,7 @@ function LeadDrawer({ leadId, onClose }: { leadId: string | null; onClose: () =>
         <div className="stack stack--tight">
           <h3 className="sub-title">Notas</h3>
           {lead.notes.length === 0 ? (
-            <p className="muted">Aún no hay notas. Apunta aquí cada contacto con el lead.</p>
+            <EmptyState title="Aún no hay notas">Apunta aquí cada contacto con el lead.</EmptyState>
           ) : (
             <ol className="timeline">
               {lead.notes.map((n, i) => (
@@ -169,7 +163,7 @@ function LeadDrawer({ leadId, onClose }: { leadId: string | null; onClose: () =>
 
         {!closed && (
           <div className="convert">
-            <h3 className="sub-title">Dar de alta como miembro</h3>
+            <h3 className="sub-title">Dar de alta como cliente</h3>
             <p className="muted">Crea la ficha en Clientes con estos datos y marca el lead como ganado.</p>
             <div className="form-grid form-grid--action">
               <Field label="Plan">
@@ -188,11 +182,11 @@ function LeadDrawer({ leadId, onClose }: { leadId: string | null; onClose: () =>
                 variant="primary"
                 onClick={() => {
                   convertLead(lead.id, planId || null);
-                  toast(`${lead.name} ya es miembro de NODO ${SEDE_LABEL[lead.sedeId]}`);
+                  toast(`${lead.name} ya es cliente de NODO ${SEDE_LABEL[lead.sedeId]}`);
                   onClose();
                 }}
               >
-                Dar de alta como miembro
+                Dar de alta como cliente
               </Button>
             </div>
           </div>
@@ -342,7 +336,13 @@ export default function Leads() {
         </Button>
       </PageHead>
 
-      {mode === 'tablero' ? (
+      {leads.length === 0 ? (
+        <Card>
+          <EmptyState title={sede === 'todas' ? 'Todavía no hay leads' : `Todavía no hay leads en ${SEDE_LABEL[sede]}`} action={<Button variant="primary" onClick={() => setCreating(true)}>Nuevo lead</Button>}>
+            Los contactos del formulario de la web aparecen aquí automáticamente. También puedes crear uno a mano.
+          </EmptyState>
+        </Card>
+      ) : mode === 'tablero' ? (
         <>
           <p className="muted board-hint">Arrastra una tarjeta para cambiarla de etapa, o ábrela y cámbiala desde la ficha.</p>
           <div className="board">
@@ -404,12 +404,7 @@ export default function Leads() {
         </>
       ) : (
         <Card flush>
-          {leads.length === 0 ? (
-            <EmptyState title="Todavía no hay leads" action={<Button variant="primary" onClick={() => setCreating(true)}>Nuevo lead</Button>}>
-              Los contactos del formulario de la web aparecen aquí automáticamente.
-            </EmptyState>
-          ) : (
-            <div className="table-wrap">
+          <div className="table-wrap">
               <table className="table">
                 <thead>
                   <tr>
@@ -456,7 +451,6 @@ export default function Leads() {
                 </tbody>
               </table>
             </div>
-          )}
         </Card>
       )}
 

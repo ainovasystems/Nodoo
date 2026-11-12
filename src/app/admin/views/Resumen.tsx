@@ -2,9 +2,10 @@
 
 import { BookingBadge, Button, Card, EmptyState, PageHead, SedeTag, Stat, TicketBadge } from '../../ui';
 import { bookingWho, inSede, memberById, monthlyRecurring, spaceById, useDemo } from '../../store';
-import { fmtDateLong, fmtHours, fmtMoney, fmtRange, fmtRelativeDay, shiftISO, todayISO } from '../../dates';
+import { fmtDateLong, fmtHours, fmtMoney, fmtRange, fmtWeekdayShort, shiftISO, todayISO } from '../../dates';
 import { ColumnChart, MeterList } from '../components/charts';
-import { fmtPct, isActive, occupancy, useSede, weekdayShort, workWeek } from '../helpers';
+import DueTag from '../components/DueTag';
+import { fmtPct, isActive, occupancy, useSede, workWeek } from '../helpers';
 
 export default function Resumen({ go }: { go: (route: string) => void }) {
   const s = useDemo();
@@ -44,7 +45,7 @@ export default function Resumen({ go }: { go: (route: string) => void }) {
       <div className="stat-grid">
         <Stat label="Reservas hoy" value={todays.length} hint={`${todays.filter((b) => b.status === 'pendiente').length} pendientes de confirmar`} tone="accent" />
         <Stat label="Ocupación de salas esta semana" value={fmtPct(roomRatio)} hint="Horas reservadas sobre horas abiertas, de lunes a sábado" />
-        <Stat label="Ingresos recurrentes al mes" value={fmtMoney(monthlyRecurring(s, sede))} hint={`${activeMembers} miembros con plan activo · sin IVA`} />
+        <Stat label="Ingresos recurrentes al mes" value={fmtMoney(monthlyRecurring(s, sede))} hint={`${activeMembers} clientes con plan activo · sin IVA`} />
         <Stat label="Leads abiertos" value={openLeads.length} hint={due.length ? `${due.length} con seguimiento para hoy o vencido` : 'Ningún seguimiento pendiente hoy'} />
       </div>
 
@@ -62,8 +63,7 @@ export default function Resumen({ go }: { go: (route: string) => void }) {
                     <div className="rows__main">
                       <p className="rows__title">{bookingWho(s, b)}</p>
                       <p className="rows__sub">
-                        {sp.name}
-                        {sede === 'todas' && <> · <SedeTag sede={b.sedeId} /></>}
+                        {sp.name} · <SedeTag sede={b.sedeId} />
                       </p>
                     </div>
                     <BookingBadge status={b.status} />
@@ -84,20 +84,20 @@ export default function Resumen({ go }: { go: (route: string) => void }) {
                   <li key={l.id}>
                     <div className="rows__main">
                       <p className="rows__title">{l.name}</p>
-                      <p className="rows__sub">{l.nextAction!.text}</p>
+                      <p className="rows__sub">
+                        {l.nextAction!.text} · <SedeTag sede={l.sedeId} />
+                      </p>
                     </div>
-                    <span className={`due ${l.nextAction!.date < today ? 'due--late' : ''}`}>
-                      {l.nextAction!.date < today ? `Vencido · ${fmtRelativeDay(l.nextAction!.date)}` : 'Hoy'}
-                    </span>
+                    <DueTag lead={l} today={today} />
                   </li>
                 ))}
               </ul>
             )}
           </Card>
 
-          <Card title="Consultas abiertas" action={<Button size="sm" variant="quiet" onClick={() => go('consultas')}>Ir a consultas</Button>}>
+          <Card title="Consultas sin resolver" action={<Button size="sm" variant="quiet" onClick={() => go('consultas')}>Ir a consultas</Button>}>
             {openTickets.length === 0 ? (
-              <EmptyState title="Sin consultas abiertas">Las consultas que abran los miembros desde su portal aparecerán aquí.</EmptyState>
+              <EmptyState title="No hay consultas sin resolver">Las consultas que abran los clientes desde su portal aparecerán aquí.</EmptyState>
             ) : (
               <ul className="rows">
                 {openTickets.map((t) => (
@@ -105,7 +105,7 @@ export default function Resumen({ go }: { go: (route: string) => void }) {
                     <div className="rows__main">
                       <p className="rows__title">{t.subject}</p>
                       <p className="rows__sub">
-                        {memberById(s, t.memberId)?.name} · {t.category}
+                        {memberById(s, t.memberId)?.name} · {t.category} · <SedeTag sede={t.sedeId} />
                       </p>
                     </div>
                     <TicketBadge status={t.status} />
@@ -126,7 +126,7 @@ export default function Resumen({ go }: { go: (route: string) => void }) {
                 name: (
                   <>
                     {sp.name}
-                    {sede === 'todas' && <SedeTag sede={sp.sedeId} />}
+                    <SedeTag sede={sp.sedeId} />
                   </>
                 ),
                 ratio: o.ratio,
@@ -145,7 +145,7 @@ export default function Resumen({ go }: { go: (route: string) => void }) {
               const n = bookings.filter((b) => b.date === d).length;
               return {
                 id: d,
-                label: d === today ? 'Hoy' : weekdayShort(d),
+                label: d === today ? 'Hoy' : fmtWeekdayShort(d),
                 sublabel: String(Number(d.slice(8))),
                 value: n,
                 current: d === today,

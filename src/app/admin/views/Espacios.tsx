@@ -1,8 +1,8 @@
 // Espacios de cada sede: capacidad, horario, tarifas y ocupación.
 
-import { Card, PageHead, SEDE_LABEL, SedeTag } from '../../ui';
+import { Card, EmptyState, PageHead, SEDE_LABEL, SedeTag } from '../../ui';
 import { inSede, useDemo } from '../../store';
-import { fmtMoney, fmtRange, todayISO } from '../../dates';
+import { fmtHours, fmtMoney, fmtRange, todayISO } from '../../dates';
 import { MeterList } from '../components/charts';
 import { fmtPct, isActive, KIND_LABEL, occupancy, SEDE_ORDER, useSede, workWeek } from '../helpers';
 
@@ -23,6 +23,11 @@ export default function Espacios() {
               <SedeTag sede={id} />
               <span className="visually-hidden">Espacios de {SEDE_LABEL[id]}</span>
             </h2>
+            {inSede(s.spaces, id).length === 0 && (
+              <Card>
+                <EmptyState title="Esta sede aún no tiene espacios">Cuando se den de alta salas o puestos en {SEDE_LABEL[id]}, aparecerán aquí.</EmptyState>
+              </Card>
+            )}
             <div className="space-grid">
               {inSede(s.spaces, id).map((sp) => {
                 const todays = s.bookings.filter((b) => b.spaceId === sp.id && b.date === today && isActive(b)).length;
@@ -34,14 +39,14 @@ export default function Espacios() {
                       <dt>Tipo</dt>
                       <dd>{KIND_LABEL[sp.kind]}</dd>
                       <dt>Capacidad</dt>
-                      <dd>{pool ? `${sp.units} puestos` : `${sp.capacity} personas`}</dd>
+                      <dd>{pool ? `${sp.units} puestos` : `Hasta ${sp.capacity} personas`}</dd>
                       <dt>Horario</dt>
                       <dd>{fmtRange(sp.open, sp.close)}</dd>
                       <dt>Se reserva</dt>
                       <dd>{pool ? 'Por jornada completa' : 'Por horas'}</dd>
-                      <dt>Tarifa miembros</dt>
+                      <dt>Tarifa de miembro</dt>
                       <dd>{pool ? 'Incluido en el plan' : `${fmtMoney(sp.rateMember)}/h`}</dd>
-                      <dt>Tarifa externos</dt>
+                      <dt>Tarifa de externo</dt>
                       <dd>{pool ? 'Incluido en el plan' : `${fmtMoney(sp.rateExternal)}/h`}</dd>
                       <dt>Reservas hoy</dt>
                       <dd>{pool ? `${todays} de ${sp.units} puestos` : todays}</dd>
@@ -54,12 +59,12 @@ export default function Espacios() {
                             name: 'Ocupación de la semana',
                             ratio: o.ratio,
                             figure: fmtPct(o.ratio),
-                            detail: pool ? `${o.used} de ${o.total} jornadas de puesto reservadas` : `${String(o.used).replace('.', ',')} h reservadas de ${o.total} h abiertas`,
+                            detail: pool ? `${o.used} de ${o.total} jornadas de puesto reservadas` : `${fmtHours(o.used)} reservadas de ${fmtHours(o.total)} abiertas`,
                           },
                         ]}
                       />
                     </div>
-                    {id === 'lugo' && <p className="note">Nombre y tarifas provisionales.</p>}
+                    {id === 'lugo' && <p className="note">Nombre y tarifas provisionales</p>}
                   </Card>
                 );
               })}

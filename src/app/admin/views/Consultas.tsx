@@ -1,8 +1,8 @@
-// Consultas de los miembros: bandeja a la izquierda, hilo a la derecha.
+// Consultas de los clientes: bandeja a la izquierda, hilo a la derecha.
 
 import { useEffect, useState, type FormEvent } from 'react';
 import { ArrowLeft } from 'lucide-react';
-import { Button, EmptyState, Field, PageHead, SedeTag, Segmented, TicketBadge, useToast } from '../../ui';
+import { Button, Card, EmptyState, Field, PageHead, SedeTag, Segmented, TicketBadge, useToast } from '../../ui';
 import { inSede, memberById, replyTicket, setTicketStatus, useDemo } from '../../store';
 import { fmtStamp } from '../../dates';
 import type { TicketStatus } from '../../types';
@@ -65,9 +65,9 @@ export default function Consultas() {
       </PageHead>
 
       <div className={`inbox ${ticket ? 'has-selection' : ''}`}>
-        <div className="inbox__list card card--flush">
+        <Card flush className="inbox__list">
           {list.length === 0 ? (
-            <EmptyState title={filter === 'abiertas' ? 'No hay consultas sin resolver' : 'No hay consultas en esta vista'}>Las consultas que abran los miembros desde su portal aparecerán aquí.</EmptyState>
+            <EmptyState title={filter === 'abiertas' ? 'No hay consultas sin resolver' : 'No hay consultas en esta vista'}>Las consultas que abran los clientes desde su portal aparecerán aquí.</EmptyState>
           ) : (
             <ul>
               {list.map((t) => (
@@ -75,7 +75,7 @@ export default function Consultas() {
                   <button type="button" className="inbox__item" aria-current={t.id === selected ? 'true' : undefined} onClick={() => setSelected(t.id)}>
                     <span className="inbox__subject">{t.subject}</span>
                     <span className="inbox__meta">
-                      {memberById(s, t.memberId)?.name} · {t.category}
+                      {memberById(s, t.memberId)?.name} · {t.category} · <SedeTag sede={t.sedeId} />
                     </span>
                     <span className="inbox__foot">
                       <TicketBadge status={t.status} />
@@ -86,17 +86,17 @@ export default function Consultas() {
               ))}
             </ul>
           )}
-        </div>
+        </Card>
 
-        <div className="inbox__thread card card--flush">
+        <Card flush className="inbox__thread">
           {!ticket || !member ? (
             <EmptyState title="Elige una consulta">Selecciona una consulta de la lista para leer el hilo y responder.</EmptyState>
           ) : (
             <>
               <header className="thread__head">
-                <button type="button" className="thread__back btn btn--quiet btn--sm" onClick={() => setSelected(null)}>
-                  <ArrowLeft size={14} aria-hidden="true" /> Volver a la lista
-                </button>
+                <Button variant="quiet" size="sm" className="thread__back" icon={<ArrowLeft size={14} aria-hidden="true" />} onClick={() => setSelected(null)}>
+                  Volver a la lista
+                </Button>
                 <div className="thread__title">
                   <h2>{ticket.subject}</h2>
                   <p className="muted">
@@ -146,7 +146,7 @@ export default function Consultas() {
               </form>
             </>
           )}
-        </div>
+        </Card>
       </div>
     </>
   );

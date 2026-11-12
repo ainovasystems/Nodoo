@@ -18,7 +18,7 @@ import {
   X,
   type LucideIcon,
 } from 'lucide-react';
-import { Avatar, DemoBar, Segmented, ToastProvider, useHashRoute } from '../ui';
+import { Avatar, Button, Card, DemoBar, EmptyState, IconButton, Segmented, ToastProvider, useHashRoute } from '../ui';
 import { inSede, useDemo } from '../store';
 import { SedeContext, type SedeFilter } from './helpers';
 import Resumen from './views/Resumen';
@@ -58,7 +58,7 @@ function Shell() {
   const [route, go] = useHashRoute('resumen');
   const [sede, setSede] = useState<SedeFilter>(readSede);
   const [menuOpen, setMenuOpen] = useState(false);
-  const view = NAV.some((n) => n.id === route) ? route : 'resumen';
+  const view = NAV.some((n) => n.id === route) ? route : null;
 
   useEffect(() => {
     try {
@@ -75,7 +75,8 @@ function Shell() {
 
   const counts: Record<string, number> = {
     leads: inSede(s.leads, sede).filter((l) => l.stage === 'nuevo').length,
-    consultas: inSede(s.tickets, sede).filter((t) => t.status === 'abierta').length,
+    // Sin resolver = abiertas + en curso.
+    consultas: inSede(s.tickets, sede).filter((t) => t.status !== 'resuelta').length,
   };
 
   return (
@@ -85,16 +86,15 @@ function Shell() {
           <a href="#/resumen" aria-label="Ir al resumen">
             <img src="/img/logo-light.webp" width="132" height="51" alt="NODO Business Club" />
           </a>
-          <button
-            type="button"
+          <IconButton
+            label={menuOpen ? 'Cerrar el menú' : 'Abrir el menú'}
             className="shell__menu-btn"
             aria-expanded={menuOpen}
             aria-controls="admin-nav"
             onClick={() => setMenuOpen((o) => !o)}
           >
             {menuOpen ? <X size={20} aria-hidden="true" /> : <Menu size={20} aria-hidden="true" />}
-            <span className="visually-hidden">Menú</span>
-          </button>
+          </IconButton>
         </div>
         <nav id="admin-nav" className={`shell__nav ${menuOpen ? 'is-open' : ''}`} aria-label="Secciones del panel">
           <ul>
@@ -106,7 +106,7 @@ function Shell() {
                   {counts[n.id] ? (
                     <span className="shell__count">
                       {counts[n.id]}
-                      <span className="visually-hidden"> {n.id === 'leads' ? 'nuevos' : 'abiertas'}</span>
+                      <span className="visually-hidden"> {n.id === 'leads' ? 'nuevos' : 'sin resolver'}</span>
                     </span>
                   ) : null}
                 </a>
@@ -146,6 +146,13 @@ function Shell() {
             {view === 'consultas' && <Consultas />}
             {view === 'facturacion' && <Facturacion />}
             {view === 'espacios' && <Espacios />}
+            {view === null && (
+              <Card>
+                <EmptyState title="Esta sección no existe" action={<Button variant="primary" onClick={() => go('resumen')}>Ir al resumen</Button>}>
+                  Puede que el enlace esté mal escrito.
+                </EmptyState>
+              </Card>
+            )}
           </SedeContext.Provider>
         </main>
       </div>
