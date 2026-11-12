@@ -1,0 +1,253 @@
+---
+import Base from '@/layouts/Base.astro';
+import Picture from '@/components/Picture.astro';
+import NodeLink from '@/components/NodeLink.astro';
+import SpaceCard from '@/components/SpaceCard.astro';
+import Rates from '@/components/Rates.astro';
+import Faq from '@/components/Faq.astro';
+import LeadForm from '@/components/LeadForm.astro';
+import { ESPACIOS, PLANES, SEDES, SITE } from '@/data/site';
+import { faqSchema, organizationSchema, sedeSchema, websiteSchema } from '@/data/schema';
+
+const site = Astro.site!;
+const heroPhoto = ESPACIOS[0].photos[2];
+const schema = [organizationSchema(site), websiteSchema(site), ...SEDES.map((s) => sedeSchema(site, s)), faqSchema()];
+---
+
+<Base
+  title="Coworking en A Coruña y Lugo | NODO Business Club"
+  description={SITE.description}
+  schema={schema}
+>
+  <link slot="head" rel="preload" as="image" href={`/img/${heroPhoto.src}-1280.webp`} imagesrcset={`/img/${heroPhoto.src}-640.webp 640w, /img/${heroPhoto.src}-1280.webp 1280w`} imagesizes="(min-width: 960px) 640px, 100vw" />
+
+  <section class="hero">
+    <div class="container hero__grid">
+      <div class="hero__copy">
+        <h1 class="hero__title" data-enter style="--i:0">
+          Coworking y salas de reuniones en <span class="hero__places">A Coruña y Lugo</span>
+        </h1>
+        <p class="lead" data-enter style="--i:3">
+          Un club de trabajo para profesionales independientes, teletrabajadores y equipos. Puestos por meses, salas por horas y una
+          comunidad con la que crecer.
+        </p>
+        <div class="hero__cta" data-enter style="--i:4">
+          <a class="btn btn--primary btn--lg" href="#contacto">Reservar una visita</a>
+          <a class="btn btn--ghost btn--lg" href="#tarifas">Ver tarifas</a>
+        </div>
+        <dl class="hero__facts" data-enter style="--i:5">
+          <div class="fact"><dt>Puesto desde</dt><dd>{PLANES[0].price} € {PLANES[0].unit}</dd></div>
+          <div class="fact"><dt>Compromiso</dt><dd>Sin permanencia</dd></div>
+          <div class="fact"><dt>Alta</dt><dd>Sin matrícula</dd></div>
+          <div class="fact"><dt>Sedes</dt><dd>{SEDES.length} en Galicia</dd></div>
+        </dl>
+      </div>
+      <div class="hero__visual">
+        <div class="hero__photo">
+          <Picture photo={heroPhoto} sizes="(min-width: 960px) 640px, 100vw" eager />
+        </div>
+        <p class="hero__tagline" data-enter style="--i:7">
+          <img src="/img/mark.png" width="512" height="512" alt="" />
+          {SITE.tagline}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--dark on-dark link-band" id="sedes">
+    <div class="container">
+      <div class="section__head">
+        <h2>Dos sedes, una misma red</h2>
+        <p class="lead">Trabaja en la que te quede más cerca. La forma de trabajar y la comunidad son las mismas en las dos.</p>
+      </div>
+      <NodeLink />
+      <div class="sedes">
+        {
+          SEDES.map((s) => (
+            <article class="sede">
+              <h3>{s.city}</h3>
+              <address class="sede__address">
+                {s.street}
+                <br />
+                {s.locality}
+              </address>
+              {s.hours && <p class="sede__meta">Abierto de {s.hours.label}</p>}
+              <div class="sede__links">
+                <a class="text-link" href={`/${s.slug}/`}>Ver la sede de {s.city}</a>
+                <a class="text-link" href={s.mapsUrl} target="_blank" rel="noopener">Cómo llegar</a>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="sobre-nodo">
+    <div class="container about">
+      <div class="section__head section__head--flush about__intro">
+        <h2>Un sitio para trabajar, conectar y crecer</h2>
+        <p class="lead">
+          NODO nace de la necesidad de un espacio para el trabajo individual, para conectar y para crear sinergias de crecimiento. Un entorno
+          flexible donde conviven trabajo, reuniones y creatividad.
+        </p>
+      </div>
+      <ul class="pillars">
+        <li data-reveal>
+          <svg class="pillar__icon" viewBox="0 0 56 56" fill="none" aria-hidden="true">
+            <circle cx="28" cy="28" r="12" fill="currentColor"></circle>
+            <circle cx="28" cy="28" r="25" stroke="currentColor" stroke-width="2" stroke-dasharray="2 7" stroke-linecap="round"></circle>
+          </svg>
+          <div>
+            <h3>Trabajo individual</h3>
+            <p>Puestos personales pensados para concentrarte y rendir: mesa propia, silla ergonómica, cajonera y buena conexión.</p>
+          </div>
+        </li>
+        <li data-reveal>
+          <svg class="pillar__icon" viewBox="0 0 56 56" fill="none" aria-hidden="true">
+            <path d="M12 16 C 26 16, 30 40, 44 40" stroke="currentColor" stroke-width="7" stroke-linecap="round"></path>
+            <circle cx="12" cy="16" r="10" fill="currentColor"></circle>
+            <circle cx="44" cy="40" r="10" fill="currentColor"></circle>
+          </svg>
+          <div>
+            <h3>Conectar</h3>
+            <p>Un club donde crear comunidad y colaboraciones entre marcas y profesionales, dentro y fuera de las salas.</p>
+          </div>
+        </li>
+        <li data-reveal>
+          <svg class="pillar__icon" viewBox="0 0 56 56" fill="none" aria-hidden="true">
+            <path d="M10 44 L 24 30 L 34 36 L 46 14" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+            <circle cx="10" cy="44" r="5" fill="currentColor"></circle>
+            <circle cx="24" cy="30" r="6" fill="currentColor"></circle>
+            <circle cx="34" cy="36" r="7" fill="currentColor"></circle>
+            <circle cx="46" cy="14" r="9" fill="currentColor"></circle>
+          </svg>
+          <div>
+            <h3>Crecer</h3>
+            <p>La conexión es el principio; el crecimiento, el resultado. Sinergias que nacen de compartir un entorno dinámico.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--white" id="espacios">
+    <div class="container">
+      <div class="section__head">
+        <h2>Un espacio para cada momento del día</h2>
+        <p class="lead">
+          Un puesto para el trabajo diario, salas para reunirte y un estudio para crear. Estos son los espacios de la sede de A Coruña.
+        </p>
+      </div>
+      <div class="spaces">
+        {ESPACIOS.map((e, i) => <SpaceCard espacio={e} wide={i < 2} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="tarifas">
+    <div class="container">
+      <div class="section__head">
+        <h2>Tarifas claras, sin permanencia</h2>
+        <p class="lead">Elige un plan mensual para tu puesto y añade horas de sala cuando las necesites. Todos los precios son sin IVA.</p>
+      </div>
+
+      <div class="plans">
+        {
+          PLANES.map((p) => (
+            <article class:list={['plan', { 'plan--featured': p.featured }]} data-reveal>
+              <div class="plan__head">
+                <h3>{p.name}</h3>
+                {p.featured && <span class="plan__flag">El más elegido</span>}
+              </div>
+              <p class="plan__price">
+                <span class="plan__amount">{p.price} €</span>
+                <span class="plan__unit">{p.unit}</span>
+              </p>
+              <ul class="checklist">
+                {p.features.map((f) => <li>{f}</li>)}
+              </ul>
+              <div class="plan__terms">
+                <span class="chip">Sin permanencia</span>
+                <span class="chip">Sin matrícula</span>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+
+      <Rates />
+      <p class="rates-note">
+        Tarifas de la sede de A Coruña. Para la sede de Lugo, <a class="text-link" href="#contacto">consulta disponibilidad y precios</a>.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--white" id="como-empezar">
+    <div class="container">
+      <div class="section__head">
+        <h2>Cómo empezar en NODO</h2>
+      </div>
+      <ol class="steps">
+        <li data-reveal>
+          <h3>Cuéntanos qué necesitas</h3>
+          <p>Un puesto fijo, una sala para una reunión o el estudio para una sesión. Escríbenos o llámanos.</p>
+        </li>
+        <li data-reveal>
+          <h3>Ven a conocer la sede</h3>
+          <p>Te enseñamos los espacios de A Coruña o Lugo y resolvemos tus dudas sobre planes y horarios.</p>
+        </li>
+        <li data-reveal>
+          <h3>Empieza a trabajar</h3>
+          <p>Sin matrícula y sin permanencia. Eliges plan y tienes tu sitio desde el primer día.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" id="preguntas">
+    <div class="container faq-layout">
+      <div class="section__head section__head--flush">
+        <h2>Preguntas frecuentes</h2>
+        <p class="lead">
+          Lo que más nos preguntan antes de venir. Si no encuentras tu duda, <a class="text-link" href="#contacto">escríbenos</a>.
+        </p>
+      </div>
+      <Faq />
+    </div>
+  </section>
+
+  <section class="section section--dark on-dark" id="contacto">
+    <div class="container contact">
+      <div class="contact__aside">
+        <div class="section__head section__head--flush">
+          <h2>Reserva una visita</h2>
+          <p class="lead">Dinos qué sede te interesa y qué necesitas. Te respondemos para concretar día y hora.</p>
+        </div>
+        <dl class="contact__list">
+          <div>
+            <dt>Teléfono</dt>
+            <dd><a href={`tel:${SITE.phoneHref}`}>{SITE.phone}</a></dd>
+          </div>
+          <div>
+            <dt>Email</dt>
+            <dd><a href={`mailto:${SITE.email}`}>{SITE.email}</a></dd>
+          </div>
+          {
+            SEDES.map((s) => (
+              <div>
+                <dt>Sede de {s.city}</dt>
+                <dd>
+                  <a href={s.mapsUrl} target="_blank" rel="noopener">
+                    {s.street}, {s.locality}
+                  </a>
+                </dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+      <LeadForm />
+    </div>
+  </section>
+</Base>

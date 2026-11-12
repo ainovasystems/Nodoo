@@ -1,0 +1,140 @@
+---
+// Textos legales en BORRADOR. Faltan los datos del titular y deben ser
+// revisados por un profesional antes de publicarse. No se indexan.
+import Base from '@/layouts/Base.astro';
+import { SEDES, SITE } from '@/data/site';
+import { breadcrumbSchema } from '@/data/schema';
+
+const DOCS = {
+  'aviso-legal': 'Aviso legal',
+  privacidad: 'Política de privacidad',
+  cookies: 'Política de cookies',
+} as const;
+
+// getStaticPaths se evalúa aparte: no puede leer constantes de este archivo.
+export function getStaticPaths() {
+  return ['aviso-legal', 'privacidad', 'cookies'].map((doc) => ({ params: { doc } }));
+}
+
+const doc = Astro.params.doc as keyof typeof DOCS;
+const title = DOCS[doc];
+const crumbs = [
+  { name: 'Inicio', path: '/' },
+  { name: title, path: `/legal/${doc}/` },
+];
+---
+
+<Base title={`${title} | ${SITE.name}`} description={`${title} de ${SITE.name}.`} schema={[breadcrumbSchema(Astro.site!, crumbs)]} noindex>
+  <nav class="breadcrumb container" aria-label="Ruta de navegación">
+    <ol>
+      <li><a href="/">Inicio</a></li>
+      <li aria-current="page">{title}</li>
+    </ol>
+  </nav>
+
+  <section class="section">
+    <div class="container"><div class="prose">
+      <h1>{title}</h1>
+      <p class="notice">
+        Borrador pendiente de completar con los datos del titular y de revisión jurídica. Los campos marcados están por rellenar.
+      </p>
+
+      {
+        doc === 'aviso-legal' && (
+          <>
+            <h2>Titular del sitio web</h2>
+            <p>
+              En cumplimiento del artículo 10 de la Ley 34/2002, de Servicios de la Sociedad de la Información y de Comercio Electrónico,
+              se informa de los datos del titular de este sitio web:
+            </p>
+            <ul>
+              <li>Denominación social: <mark>pendiente</mark></li>
+              <li>NIF: <mark>pendiente</mark></li>
+              <li>Domicilio social: <mark>pendiente</mark></li>
+              <li>Datos de inscripción registral: <mark>pendiente</mark></li>
+              <li>Email de contacto: {SITE.email}</li>
+              <li>Teléfono: {SITE.phone}</li>
+            </ul>
+            <h2>Centros de actividad</h2>
+            <ul>
+              {SEDES.map((s) => <li>{s.name}: {s.street}, {s.locality}.</li>)}
+            </ul>
+            <h2>Condiciones de uso</h2>
+            <p>
+              El acceso a este sitio web es gratuito y atribuye la condición de usuario, que acepta estas condiciones. Los precios
+              publicados se indican sin IVA y pueden modificarse; la contratación de cualquier servicio se formaliza directamente con
+              {' '}{SITE.name}.
+            </p>
+            <h2>Propiedad intelectual e industrial</h2>
+            <p>
+              Los textos, fotografías, logotipos y demás contenidos de este sitio pertenecen a su titular o se usan con autorización. No
+              está permitida su reproducción sin consentimiento previo.
+            </p>
+          </>
+        )
+      }
+
+      {
+        doc === 'privacidad' && (
+          <>
+            <h2>Responsable del tratamiento</h2>
+            <p>
+              <mark>Denominación social y NIF pendientes</mark>. Contacto para privacidad: {SITE.email}.
+            </p>
+            <h2>Qué datos tratamos y para qué</h2>
+            <ul>
+              <li>
+                Formulario de contacto: nombre, email, teléfono, empresa y mensaje, para responder a tu solicitud y, si lo pides,
+                concertar una visita.
+              </li>
+              <li>Clientes y miembros: datos de contacto y facturación, para prestar el servicio contratado y gestionar reservas.</li>
+            </ul>
+            <h2>Base legal</h2>
+            <p>
+              Tu consentimiento al enviar el formulario (art. 6.1.a RGPD) y la ejecución del contrato cuando eres cliente (art. 6.1.b
+              RGPD).
+            </p>
+            <h2>Conservación</h2>
+            <p>
+              Las solicitudes se conservan durante <mark>plazo pendiente</mark>. Los datos de clientes, mientras dure la relación y los
+              plazos legales aplicables.
+            </p>
+            <h2>Destinatarios</h2>
+            <p>
+              No se ceden datos a terceros salvo obligación legal. Proveedores que acceden a datos como encargados del tratamiento:
+              {' '}<mark>pendiente (alojamiento web, correo electrónico)</mark>.
+            </p>
+            <h2>Tus derechos</h2>
+            <p>
+              Puedes ejercer los derechos de acceso, rectificación, supresión, oposición, limitación y portabilidad escribiendo a
+              {' '}{SITE.email}. También puedes reclamar ante la Agencia Española de Protección de Datos (aepd.es).
+            </p>
+          </>
+        )
+      }
+
+      {
+        doc === 'cookies' && (
+          <>
+            <h2>Cookies que usa este sitio</h2>
+            <p>
+              Este sitio web no instala cookies de analítica ni de publicidad. No se usan píxeles ni herramientas de seguimiento de
+              terceros.
+            </p>
+            <h2>Almacenamiento local</h2>
+            <p>
+              La demostración del área de miembros guarda datos de ejemplo en el almacenamiento local de tu navegador. No salen de tu
+              dispositivo y puedes borrarlos desde la propia demo o desde los ajustes del navegador.
+            </p>
+            <h2>Recursos de terceros</h2>
+            <p>
+              La tipografía de marca se carga desde un servidor externo (cdnfonts.com), que recibe tu dirección IP al hacerlo.
+              {' '}<mark>Pendiente: alojar la tipografía en el propio sitio cuando se disponga de la licencia.</mark>
+            </p>
+            <p>Si en el futuro se añaden cookies no necesarias, se pedirá tu consentimiento antes de instalarlas.</p>
+          </>
+        )
+      }
+    </div></div>
+  </section>
+</Base>

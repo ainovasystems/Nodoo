@@ -1,0 +1,117 @@
+---
+// Plantilla de todas las páginas públicas: metadatos SEO, cabecera y pie.
+import '@/styles/global.css';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import { SITE } from '@/data/site';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Uno o varios bloques JSON-LD. */
+  schema?: object[];
+  image?: string;
+  noindex?: boolean;
+}
+
+const { title, description, schema = [], image = '/img/og.jpg', noindex = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL(image, Astro.site);
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:locale" content="es_ES" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    {image === '/img/og.jpg' && <meta property="og:image:width" content="1200" />}
+    {image === '/img/og.jpg' && <meta property="og:image:height" content="630" />}
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <meta name="theme-color" content="#fff6ee" />
+    <link rel="icon" type="image/png" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <!-- Scanno es la tipografía de marca. Se carga sin bloquear el render. -->
+    <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/scanno" media="print" onload="this.media='all'" />
+
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+    {schema.map((block) => <script type="application/ld+json" set:html={JSON.stringify(block)} />)}
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <Header />
+    <main id="contenido">
+      <slot />
+    </main>
+    <Footer />
+
+    <script>
+      // Menú móvil
+      const toggle = document.querySelector<HTMLButtonElement>('[data-nav-toggle]');
+      const nav = document.querySelector<HTMLElement>('[data-nav]');
+      if (toggle && nav) {
+        const close = () => {
+          nav.classList.remove('is-open');
+          toggle.setAttribute('aria-expanded', 'false');
+        };
+        toggle.addEventListener('click', () => {
+          const open = nav.classList.toggle('is-open');
+          toggle.setAttribute('aria-expanded', String(open));
+        });
+        nav.addEventListener('click', (e) => {
+          if ((e.target as HTMLElement).closest('a')) close();
+        });
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && nav.classList.contains('is-open')) {
+            close();
+            toggle.focus();
+          }
+        });
+      }
+
+      // Borde de la cabecera al desplazarse
+      const header = document.querySelector<HTMLElement>('[data-header]');
+      if (header) {
+        const onScroll = () => header.classList.toggle('is-scrolled', window.scrollY > 8);
+        onScroll();
+        window.addEventListener('scroll', onScroll, { passive: true });
+      }
+
+      // Aparición discreta de bloques, una sola vez
+      const targets = document.querySelectorAll<HTMLElement>('[data-reveal]');
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                io.unobserve(entry.target);
+              }
+            }
+          },
+          { rootMargin: '0px 0px -8% 0px', threshold: 0.08 },
+        );
+        targets.forEach((t) => io.observe(t));
+      } else {
+        targets.forEach((t) => t.classList.add('is-visible'));
+      }
+    </script>
+  </body>
+</html>

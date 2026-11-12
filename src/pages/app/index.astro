@@ -1,0 +1,37 @@
+---
+// Entrada a la demo de gestión: elige entre el portal de miembros y el panel interno.
+import AppLayout from '@/layouts/AppLayout.astro';
+import '@/app/app.css';
+import '@/styles/buttons.css';
+import '@/app/entry.css';
+---
+
+<AppLayout title="Demo de gestión">
+  <div class="demo-bar">
+    <p><strong>Demo.</strong> Datos ficticios guardados solo en este navegador. No hay servidor ni cuentas reales.</p>
+    <div class="demo-bar__actions"><a href="/">Volver a la web</a></div>
+  </div>
+  <main class="entry">
+    <a href="/" aria-label="NODO Business Club, inicio"><img class="entry__logo" src="/img/logo.webp" width="520" height="200" alt="NODO Business Club" /></a>
+    <h1 class="entry__title">Gestión de NODO, en dos vistas</h1>
+    <p class="entry__lead">
+      Una demostración de cómo funcionaría la gestión de reservas y clientes para las sedes de A Coruña y Lugo. Lo que hagas en una
+      vista se refleja en la otra.
+    </p>
+    <div class="entry__grid">
+      <article class="entry__card">
+        <h2>Portal de miembros</h2>
+        <p>Lo que ve un cliente: reservar salas y puestos, gestionar su suscripción, consultar facturas y abrir consultas.</p>
+        <a class="btn btn--primary" href="/app/portal/">Entrar como miembro</a>
+      </article>
+      <article class="entry__card entry__card--dark">
+        <h2>Panel interno</h2>
+        <p>Lo que ve el equipo: calendario por sala y sede, reservas, seguimiento de leads, clientes, consultas y facturación.</p>
+        <a class="btn btn--primary" href="/app/admin/">Entrar como equipo</a>
+      </article>
+    </div>
+    <p class="entry__hint">
+      Prueba esto: envía el formulario de contacto de la web y abre el panel. La solicitud aparece como lead nuevo.
+    </p>
+  </main>
+</AppLayout>

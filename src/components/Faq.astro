@@ -1,0 +1,19 @@
+---
+import { FAQS } from '@/data/site';
+
+interface Props {
+  items?: { q: string; a: string }[];
+}
+const { items = FAQS } = Astro.props;
+---
+
+<div class="faq">
+  {
+    items.map((item, i) => (
+      <details open={i === 0}>
+        <summary>{item.q}</summary>
+        <p class="faq__answer">{item.a}</p>
+      </details>
+    ))
+  }
+</div>
