@@ -1,0 +1,24 @@
+---
+// Foto optimizada: WebP en varios anchos, con dimensiones para evitar saltos.
+import { photoSrcset, type Photo } from '@/data/site';
+
+interface Props {
+  photo: Photo;
+  sizes: string;
+  eager?: boolean;
+}
+const { photo, sizes, eager = false } = Astro.props;
+const fallback = photo.w >= 1280 ? 1280 : 640;
+---
+
+<img
+  src={`/img/${photo.src}-${fallback}.webp`}
+  srcset={photoSrcset(photo)}
+  sizes={sizes}
+  width={photo.w}
+  height={photo.h}
+  alt={photo.alt}
+  loading={eager ? 'eager' : 'lazy'}
+  decoding={eager ? 'sync' : 'async'}
+  fetchpriority={eager ? 'high' : undefined}
+/>

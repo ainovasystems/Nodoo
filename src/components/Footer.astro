@@ -1,0 +1,54 @@
+---
+import { ESPACIOS, SEDES, SITE } from '@/data/site';
+const year = new Date().getFullYear();
+---
+
+<footer class="footer on-dark">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <a href="/" aria-label="NODO Business Club, inicio">
+          <img src="/img/logo-light.webp" width="520" height="200" alt="NODO Business Club" loading="lazy" />
+        </a>
+        <p>{SITE.tagline}. Coworking, salas de reuniones y estudio profesional en A Coruña y Lugo.</p>
+      </div>
+
+      <nav aria-label="Espacios">
+        <h2>Espacios</h2>
+        <ul>
+          {ESPACIOS.map((e) => <li><a href={`/espacios/${e.slug}/`}>{e.name}</a></li>)}
+        </ul>
+      </nav>
+
+      <div>
+        <h2>Sedes</h2>
+        {SEDES.map((s) => (
+          <address class="footer__sede">
+            <strong><a href={`/${s.slug}/`}>{s.city}</a></strong>
+            <span>{s.street}</span>
+            <span>{s.locality}</span>
+          </address>
+        ))}
+      </div>
+
+      <div>
+        <h2>Contacto</h2>
+        <ul>
+          <li><a href={`tel:${SITE.phoneHref}`}>{SITE.phone}</a></li>
+          <li><a href={`mailto:${SITE.email}`}>{SITE.email}</a></li>
+          <li><a href={SITE.instagram} rel="noopener">Instagram</a></li>
+          <li><a href={SITE.linkedin} rel="noopener">LinkedIn</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <p>© {year} {SITE.name}. Todos los derechos reservados.</p>
+      <ul>
+        <li><a href="/legal/aviso-legal/">Aviso legal</a></li>
+        <li><a href="/legal/privacidad/">Privacidad</a></li>
+        <li><a href="/legal/cookies/">Cookies</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>

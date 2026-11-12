@@ -1,0 +1,152 @@
+---
+import Base from '@/layouts/Base.astro';
+import Picture from '@/components/Picture.astro';
+import Rates from '@/components/Rates.astro';
+import { ESPACIOS, PLANES, SEDES, SITE, TARIFAS_SALAS, type Espacio } from '@/data/site';
+import { breadcrumbSchema, espacioSchema } from '@/data/schema';
+
+export function getStaticPaths() {
+  return ESPACIOS.map((espacio) => ({ params: { slug: espacio.slug }, props: { espacio } }));
+}
+
+interface Props {
+  espacio: Espacio;
+}
+const { espacio } = Astro.props;
+const site = Astro.site!;
+const coruna = SEDES[0];
+const others = ESPACIOS.filter((e) => e.slug !== espacio.slug);
+const hasRates = TARIFAS_SALAS.some((t) => t.slug === espacio.slug);
+const isHive = espacio.slug === 'the-hive';
+const crumbs = [
+  { name: 'Inicio', path: '/' },
+  { name: 'Espacios', path: '/#espacios' },
+  { name: espacio.name, path: `/espacios/${espacio.slug}/` },
+];
+const title = `${espacio.name}: ${espacio.kind.toLowerCase()} en A Coruña | NODO Business Club`;
+---
+
+<Base title={title} description={`${espacio.summary} En NODO Business Club, ${coruna.street}, A Coruña.`} image={`/img/${espacio.photos[0].src}-1280.webp`} schema={[espacioSchema(site, espacio), breadcrumbSchema(site, crumbs)]}>
+  <nav class="breadcrumb container" aria-label="Ruta de navegación">
+    <ol>
+      <li><a href="/">Inicio</a></li>
+      <li><a href="/#espacios">Espacios</a></li>
+      <li aria-current="page">{espacio.name}</li>
+    </ol>
+  </nav>
+
+  <section class="page-hero">
+    <div class="container page-hero__grid">
+      <div class="page-hero__copy">
+        <p class="page-hero__kind">{espacio.kind} · Sede de A Coruña</p>
+        <h1>{espacio.name}</h1>
+        <p class="lead">{espacio.lead}</p>
+        <a class="btn btn--primary btn--lg" href="#reservar">{isHive ? 'Reservar una visita' : 'Consultar disponibilidad'}</a>
+      </div>
+      <dl class="facts">
+        {espacio.capacity && <div><dt>Capacidad</dt><dd>Hasta {espacio.capacity} personas</dd></div>}
+        <div><dt>Horario</dt><dd>{espacio.hours ?? coruna.hours?.label}</dd></div>
+        <div><dt>Precio</dt><dd>{espacio.priceFrom}</dd></div>
+        <div><dt>Dónde</dt><dd>{coruna.street}, {coruna.locality}</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section section--white">
+    <div class="container">
+      <h2 class="visually-hidden">Fotos de {espacio.name}</h2>
+      <div class={`gallery gallery--${espacio.photos.length}`}>
+        {
+          espacio.photos.map((photo, i) => (
+            <figure>
+              <Picture photo={photo} sizes={i === 0 ? '(min-width: 1240px) 1200px, 100vw' : '(min-width: 700px) 50vw, 100vw'} eager={i === 0} />
+            </figure>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container split">
+      <div class="section__head">
+        <h2>Qué incluye {espacio.name}</h2>
+        <ul class="checklist">
+          {espacio.highlights.map((h) => <li>{h}</li>)}
+        </ul>
+      </div>
+      <dl class="features">
+        {
+          espacio.details.map((d) => (
+            <div>
+              <dt>{d.title}</dt>
+              <dd>{d.text}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  {
+    (hasRates || isHive) && (
+      <section class="section section--white">
+        <div class="container">
+          <div class="section__head">
+            <h2>Tarifas de {espacio.name}</h2>
+            <p class="lead">Precios sin IVA.</p>
+          </div>
+          {isHive ? (
+            <div class="plans">
+              {PLANES.map((p) => (
+                <article class:list={['plan', { 'plan--featured': p.featured }]}>
+                  <div class="plan__head">
+                    <h3>{p.name}</h3>
+                    {p.featured && <span class="plan__flag">El más elegido</span>}
+                  </div>
+                  <p class="plan__price">
+                    <span class="plan__amount">{p.price} €</span>
+                    <span class="plan__unit">{p.unit}</span>
+                  </p>
+                  <ul class="checklist">
+                    {p.features.map((f) => <li>{f}</li>)}
+                  </ul>
+                  <div class="plan__terms">
+                    <span class="chip">Sin permanencia</span>
+                    <span class="chip">Sin matrícula</span>
+                  </div>
+                </article>
+              ))}
+            </div>
+          ) : (
+            <Rates only={espacio.slug} />
+          )}
+        </div>
+      </section>
+    )
+  }
+
+  <section class="section section--dark on-dark" id="reservar">
+    <div class="container cta-band">
+      <div class="section__head section__head--flush">
+        <h2>{isHive ? 'Ven a conocer The Hive' : `Reserva ${espacio.name}`}</h2>
+        <p class="lead">Escríbenos o llámanos y te confirmamos disponibilidad para el día que necesitas.</p>
+      </div>
+      <div class="cta-band__actions">
+        <a class="btn btn--primary btn--lg" href="/#contacto">Enviar solicitud</a>
+        <a class="btn btn--on-dark btn--lg" href={`tel:${SITE.phoneHref}`}>Llamar al {SITE.phone}</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section__head section__head--tight">
+        <h2>Otros espacios de NODO</h2>
+      </div>
+      <div class="other-spaces">
+        {others.map((o) => <a class="btn btn--ghost btn--lg" href={`/espacios/${o.slug}/`}>{o.name}</a>)}
+      </div>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,68 @@
+---
+// Tarifas de salas. En la portada se muestran todas, una columna por
+// espacio; en la página de un espacio, solo las suyas, una columna por grupo.
+import { TARIFAS_SALAS } from '@/data/site';
+
+interface Props {
+  only?: string;
+}
+const { only } = Astro.props;
+const blocks = only ? TARIFAS_SALAS.filter((t) => t.slug === only) : TARIFAS_SALAS;
+---
+
+{
+  only ? (
+    blocks.map((block) => (
+      <>
+        <div class="rates">
+          {block.groups.map((group) => (
+            <div class="rate">
+              <h3 class="rate__title">{group.title}</h3>
+              <table class="rate__table">
+                <tbody>
+                  {group.rows.map((row) => (
+                    <tr>
+                      <th scope="row">{row.name}</th>
+                      <td>
+                        {row.price} <small>{row.unit}</small>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ))}
+        </div>
+        {block.note && <p class="rates-note">{block.note}</p>}
+      </>
+    ))
+  ) : (
+    <div class="rates">
+      {blocks.map((block) => (
+        <div class="rate" data-reveal>
+          <h3 class="rate__title">
+            <a href={`/espacios/${block.slug}/`}>{block.space}</a>
+          </h3>
+          {block.groups.map((group) => (
+            <div>
+              <p class="rate__group">{group.title}</p>
+              <table class="rate__table">
+                <tbody>
+                  {group.rows.map((row) => (
+                    <tr>
+                      <th scope="row">{row.name}</th>
+                      <td>
+                        {row.price} <small>{row.unit}</small>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ))}
+          {block.note && <p class="rate__note">{block.note}</p>}
+        </div>
+      ))}
+    </div>
+  )
+}

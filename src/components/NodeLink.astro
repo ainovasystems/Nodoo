@@ -1,0 +1,36 @@
+---
+// Dos nodos unidos: las dos sedes de NODO. Recoge el gesto del logotipo
+// (nodos y enlaces) y lo pone en movimiento. Es decorativo.
+---
+
+<svg class="node-link" viewBox="0 0 1200 200" aria-hidden="true" focusable="false">
+  <defs>
+    <filter id="nodo-goo" x="-5%" y="-40%" width="110%" height="180%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="9" result="blur"></feGaussianBlur>
+      <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -10"></feColorMatrix>
+    </filter>
+    <path id="nodo-link-path" d="M100 100 C 380 100, 420 36, 600 100 S 820 164, 1100 100"></path>
+  </defs>
+  <g filter="url(#nodo-goo)">
+    <use class="node-link__path" href="#nodo-link-path"></use>
+    <circle class="node-link__node" cx="100" cy="100" r="62"></circle>
+    <circle class="node-link__node" cx="1100" cy="100" r="62"></circle>
+    <circle class="node-link__pulse" r="24">
+      <animateMotion dur="9s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear">
+        <mpath href="#nodo-link-path"></mpath>
+      </animateMotion>
+    </circle>
+    <circle class="node-link__pulse" r="19">
+      <animateMotion dur="9s" begin="-4.5s" repeatCount="indefinite" keyPoints="1;0" keyTimes="0;1" calcMode="linear">
+        <mpath href="#nodo-link-path"></mpath>
+      </animateMotion>
+    </circle>
+    <circle class="node-link__pulse" r="16">
+      <animateMotion dur="9s" begin="-2s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear">
+        <mpath href="#nodo-link-path"></mpath>
+      </animateMotion>
+    </circle>
+  </g>
+  <circle cx="100" cy="100" r="18" fill="var(--nodo-dark)"></circle>
+  <circle cx="1100" cy="100" r="18" fill="var(--nodo-dark)"></circle>
+</svg>

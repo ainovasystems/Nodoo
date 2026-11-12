@@ -1,0 +1,17 @@
+# NODO Business Club
+User-agent: *
+Allow: /
+Disallow: /app/
+
+# Asistentes y buscadores de IA: bienvenidos al contenido público.
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: ClaudeBot
+User-agent: Claude-SearchBot
+User-agent: PerplexityBot
+User-agent: Google-Extended
+Allow: /
+Disallow: /app/
+
+Sitemap: https://nodobc.com/sitemap-index.xml

@@ -1,0 +1,8 @@
+---
+import AppLayout from '@/layouts/AppLayout.astro';
+import PortalApp from '@/app/portal/PortalApp';
+---
+
+<AppLayout title="Portal de miembros (demo)">
+  <PortalApp client:only="react" />
+</AppLayout>

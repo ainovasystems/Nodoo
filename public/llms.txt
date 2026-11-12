@@ -1,0 +1,31 @@
+# NODO Business Club
+
+> Coworking, salas de reuniones y estudio profesional con dos sedes en Galicia (España): A Coruña y Lugo. Lema: "Where things start to happen".
+
+## Datos clave
+
+- Sede de A Coruña: Avenida Linares Rivas, 5, 3º, A Coruña. Horario: 07:00 a 00:00.
+- Sede de Lugo: Estrada da Granxa, 2, entreplanta, Lugo.
+- Teléfono: +34 611 724 527
+- Email: info@nodobc.com
+- Para quién: profesionales independientes, teletrabajadores y empresas.
+
+## Tarifas (sin IVA, sede de A Coruña)
+
+- The Hive Basic (puesto de coworking): 149 €/mes. Escritorio estándar, WiFi de alta velocidad, cajonera personal y zonas comunes.
+- The Hive Plus (puesto de coworking): 199 €/mes. Escritorio a elegir según disponibilidad, WiFi, cajonera personal y zonas comunes.
+- Los planes de coworking no tienen permanencia ni matrícula.
+- Chatroom (sala de reuniones, 10 personas): 20 €/hora para externos; packs para miembros de 4 h/mes (50 €) y 10 h/mes (100 €).
+- Atlantic Studio (sala y estudio fotográfico, 12 personas): medio día 190 €, día completo 320 €; packs para miembros de 4 h/mes (160 €) y 10 h/mes (300 €). Horario: 07:00 a 21:00.
+- The Office (oficina con vistas al mar, 8 personas): 2.475 €/mes.
+
+## Páginas
+
+- [Inicio](https://nodobc.com/): presentación, espacios, tarifas, preguntas frecuentes y contacto.
+- [Coworking en A Coruña](https://nodobc.com/coworking-a-coruna/): la sede de Linares Rivas y sus espacios.
+- [Coworking en Lugo](https://nodobc.com/coworking-lugo/): la sede de Estrada da Granxa.
+- [The Hive](https://nodobc.com/espacios/the-hive/): sala de coworking con puestos asignados.
+- [Chatroom](https://nodobc.com/espacios/chatroom/): sala de reuniones para 10 personas con videoconferencia.
+- [The Office](https://nodobc.com/espacios/the-office/): sala ejecutiva para 8 personas con vistas al mar y aseo propio.
+- [Atlantic Studio](https://nodobc.com/espacios/atlantic-studio/): sala polivalente y estudio fotográfico para 12 personas.
+- [Espacios comunes](https://nodobc.com/espacios/espacios-comunes/): hall, zona de estar y cocina-bar, incluidos en todos los planes.

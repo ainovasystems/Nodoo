@@ -1,0 +1,115 @@
+/* Tema NODO Business Club.
+   Único sitio donde viven los valores de marca. La web pública y la demo
+   de gestión (portal y panel) leen de aquí. */
+
+:root {
+  /* Paleta de marca (manual de identidad) */
+  --nodo-dark: #393b18;
+  --nodo-orange: #f0470c;
+  --nodo-brown: #71452c;
+  --nodo-cream: #fff6ee;
+  --nodo-white: #ffffff;
+  --nodo-black: #000000;
+
+  /* Derivados de la paleta */
+  --ink: #1a1b0a; /* texto sobre naranja y titulares muy oscuros */
+  --olive-900: #26280f;
+  --olive-600: #55583a; /* texto secundario sobre crema o blanco */
+  --olive-300: #b9b9a3;
+  --cream-200: #f7eadb; /* superficie crema un punto más profunda */
+  --cream-300: #eddcc8;
+  --orange-700: #c93a05; /* naranja para texto pequeño sobre claro */
+  --orange-100: #fde3d6;
+  --line: rgba(57, 59, 24, 0.14);
+  --line-strong: rgba(57, 59, 24, 0.28);
+  --on-dark: #fff6ee;
+  --on-dark-muted: rgba(255, 246, 238, 0.72);
+  --line-on-dark: rgba(255, 246, 238, 0.18);
+
+  /* Estados */
+  --ok: #2c6a3b;
+  --ok-bg: #e2f0e0;
+  --warn: #8a5300;
+  --warn-bg: #fbecc9;
+  --danger: #b3261e;
+  --danger-bg: #f9dedb;
+  --info: #71452c;
+  --info-bg: #f1e4d9;
+
+  /* Tipografía */
+  --font-display: 'Scanno', 'Poppins', system-ui, sans-serif;
+  --font-body: 'Poppins', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-md: 1.125rem;
+  --text-lg: 1.375rem;
+  --text-xl: 1.75rem;
+  --text-2xl: clamp(2rem, 1.4rem + 2.4vw, 3rem);
+  --text-3xl: clamp(2.5rem, 1.6rem + 3.8vw, 4.25rem);
+
+  /* Espaciado, base 4 */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 20px;
+  --s-6: 24px;
+  --s-8: 32px;
+  --s-10: 40px;
+  --s-12: 48px;
+  --s-16: 64px;
+  --s-20: 80px;
+  --s-24: 96px;
+  --s-32: 128px;
+
+  /* Forma */
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 20px;
+  --r-xl: 32px;
+  --r-pill: 999px;
+
+  /* Sombras, teñidas con el marrón de marca */
+  --shadow-sm: 0 1px 2px rgba(113, 69, 44, 0.08);
+  --shadow-md: 0 5px 20px rgba(113, 69, 44, 0.1);
+  --shadow-lg: 0 10px 30px rgba(113, 69, 44, 0.15);
+
+  /* Movimiento */
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --t-fast: 150ms;
+  --t-med: 300ms;
+
+  --container: 1200px;
+  --gutter: 20px;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('@fontsource/poppins/files/poppins-latin-400-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('@fontsource/poppins/files/poppins-latin-500-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('@fontsource/poppins/files/poppins-latin-600-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('@fontsource/poppins/files/poppins-latin-700-normal.woff2') format('woff2');
+}

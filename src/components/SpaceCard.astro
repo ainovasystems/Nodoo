@@ -1,0 +1,25 @@
+---
+import Picture from './Picture.astro';
+import type { Espacio } from '@/data/site';
+
+interface Props {
+  espacio: Espacio;
+  wide?: boolean;
+}
+const { espacio, wide = false } = Astro.props;
+---
+
+<article class:list={['space-card', { 'space-card--wide': wide }]} data-reveal>
+  <div class="space-card__media">
+    <Picture photo={espacio.photos[0]} sizes={wide ? '(min-width: 1020px) 600px, 100vw' : '(min-width: 1020px) 400px, (min-width: 700px) 50vw, 100vw'} />
+  </div>
+  <div class="space-card__body">
+    <p class="space-card__kind">{espacio.kind}</p>
+    <h3 class="space-card__title"><a href={`/espacios/${espacio.slug}/`}>{espacio.name}</a></h3>
+    <p class="space-card__summary">{espacio.summary}</p>
+    <div class="space-card__meta">
+      {espacio.capacity && <span class="chip">Hasta {espacio.capacity} personas</span>}
+      {espacio.priceFrom && <span class="chip">{espacio.priceFrom}</span>}
+    </div>
+  </div>
+</article>

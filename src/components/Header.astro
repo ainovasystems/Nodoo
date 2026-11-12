@@ -1,0 +1,30 @@
+---
+const links = [
+  { href: '/#espacios', label: 'Espacios' },
+  { href: '/#sedes', label: 'Sedes' },
+  { href: '/#tarifas', label: 'Tarifas' },
+  { href: '/#preguntas', label: 'Preguntas frecuentes' },
+  { href: '/#contacto', label: 'Contacto' },
+];
+---
+
+<header class="header" data-header>
+  <div class="container header__inner">
+    <a class="header__logo" href="/" aria-label="NODO Business Club, inicio">
+      <img src="/img/logo.webp" width="520" height="200" alt="NODO Business Club" />
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="menu" data-nav-toggle>
+      <span class="visually-hidden">Menú</span>
+      <span class="nav-toggle__bars" aria-hidden="true"></span>
+    </button>
+    <nav class="nav" id="menu" aria-label="Principal" data-nav>
+      <ul class="nav__list">
+        {links.map((l) => <li><a class="nav__link" href={l.href}>{l.label}</a></li>)}
+      </ul>
+      <div class="nav__actions">
+        <a class="btn btn--ghost" href="/app/">Área de miembros</a>
+        <a class="btn btn--primary" href="/#contacto">Reservar una visita</a>
+      </div>
+    </nav>
+  </div>
+</header>

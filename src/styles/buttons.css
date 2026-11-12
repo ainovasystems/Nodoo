@@ -1,0 +1,94 @@
+/* Botones. Compartidos por la web pública y la demo de gestión. */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-2);
+  min-height: 40px;
+  padding: var(--s-2) var(--s-4);
+  border: 1px solid transparent;
+  border-radius: var(--r-pill);
+  font-weight: 600;
+  font-size: var(--text-sm);
+  line-height: 1.2;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn--sm {
+  min-height: 32px;
+  padding: var(--s-1) var(--s-3);
+  font-size: var(--text-xs);
+}
+
+.btn--lg {
+  min-height: 52px;
+  padding: var(--s-3) var(--s-6);
+  font-size: var(--text-base);
+}
+
+.btn--primary {
+  background: var(--nodo-orange);
+  color: var(--ink);
+}
+
+.btn--primary:hover:not(:disabled) {
+  background: #ff5a1f;
+}
+
+.btn--dark {
+  background: var(--nodo-dark);
+  color: var(--on-dark);
+}
+
+.btn--dark:hover:not(:disabled) {
+  background: var(--olive-900);
+}
+
+.btn--ghost {
+  background: var(--nodo-white);
+  border-color: var(--line-strong);
+  color: var(--nodo-dark);
+}
+
+.btn--ghost:hover:not(:disabled) {
+  border-color: var(--nodo-dark);
+}
+
+.btn--quiet {
+  background: transparent;
+  color: var(--nodo-dark);
+}
+
+.btn--quiet:hover:not(:disabled) {
+  background: var(--cream-200);
+}
+
+.btn--danger {
+  background: var(--nodo-white);
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.btn--danger:hover:not(:disabled) {
+  background: var(--danger-bg);
+}
+
+/* Sobre fondo oliva */
+.btn--on-dark {
+  background: transparent;
+  border-color: var(--line-on-dark);
+  color: var(--on-dark);
+}
+
+.btn--on-dark:hover:not(:disabled) {
+  border-color: var(--on-dark);
+}
